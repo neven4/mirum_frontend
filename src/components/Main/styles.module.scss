@@ -1,0 +1,18 @@
+@import '../../styles/global.scss';
+
+.main {
+    padding: 62px 10px 67px;
+    position: relative;
+
+    &_container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 14px;
+        grid-row-gap: 12px;
+        -webkit-overflow-scrolling: touch;
+
+        section:nth-child(5n) {
+            grid-column: 1 / 3;
+         }
+    }
+}

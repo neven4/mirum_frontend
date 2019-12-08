@@ -1,0 +1,70 @@
+@import '../../styles/global.scss';
+
+.header {
+    box-sizing: border-box;
+    border-bottom: 1px solid $lightGrey;
+    background-color: $white;
+    display: flex;
+    height: 45px;
+    position: fixed;
+    width: 100%;
+    z-index: 10000;
+
+    &_nav {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        flex-grow: 1;
+
+        li {
+            display: flex;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            line-height: 45px;
+
+            &:not(:first-child) {
+                margin-left: 15px;
+            }
+        }
+
+        &_title {
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        &_next {
+            margin-left: auto !important;
+    
+            span {
+                font-weight: 700;
+            }
+        }
+    } 
+}
+
+.active {
+    font-weight: 700;
+    border-bottom: 1px solid #000;
+}
+
+.backIcon {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    display: block;
+    margin-top: 9px;
+    margin-left: 10px;
+}
+
+.instagram {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    align-self: center;
+}

@@ -1,0 +1,33 @@
+@import '../../styles/global.scss';
+
+.metro {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &_icon {
+        border-radius: 50%;
+        height: 8px;
+        width: 8px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    &_label {
+        color: $darkGrey;
+        margin-left: 13px;
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        line-height: 18px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    &_arrow {
+        margin-left: auto;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+}

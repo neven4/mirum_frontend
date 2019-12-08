@@ -1,0 +1,128 @@
+@import '../../styles/global.scss';
+
+.icons {
+    display: flex;
+    align-items: center;
+
+    li {
+        display: flex;
+        align-items: center;
+        width: 35px;
+        height: 35px;
+
+        &:not(:first-child) {
+            margin-left: 15px;
+        }
+    }
+}
+
+.modalBackground {
+    position: fixed;
+    z-index: 13000;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba($black, .3)
+}
+
+.linksModal {
+    width: 270px;
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 18px;
+    background-color: $white;
+    z-index: 14000;
+
+    .closeBtn {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 14px;
+        right: 10px;
+    }
+
+    h4 {
+        margin: 0;
+        font-size: 18px;
+        line-height: 24px;
+        color: $black;
+        margin-bottom: 15px;
+    }
+}
+
+.shareBtn {
+    width: 90px;
+    height: 25px;
+    border-radius: 4px;
+    background-color: rgb(71, 122, 255);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+    span {
+        font-size: 12px;
+        color: $white;
+        font-weight: 700;
+        line-height: 12px;
+    }
+}
+
+.copySuccess {
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px 20px 0px 0px;
+    height: 40px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    color: $black;
+    font-size: 14px;
+    line-height: 14px;
+    animation-name: open;
+    animation-duration: 2.5s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes open {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: block;
+        opacity: 0;
+    }
+
+    20% {
+        display: block;
+        opacity: 1;
+    }
+
+    80% {
+        display: block;
+        opacity: 1;
+    }
+
+    99% {
+        display: block;
+        opacity: 0;
+    }
+
+    100% {
+        display: none;
+        opacity: 0;
+    }
+}

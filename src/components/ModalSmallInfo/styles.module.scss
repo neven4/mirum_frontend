@@ -1,0 +1,88 @@
+@import '../../styles/global.scss';
+
+.smallModal {
+    margin: 0 10px;
+
+    &_body {
+        display: flex;
+    }
+
+    &_img {
+        position: relative;
+        margin-right: 12px;
+
+        div {
+            width: 120px;
+            height: 120px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
+    }
+
+    &_info {
+        display: flex;
+        flex-direction: column;
+
+        h2 {
+            font-size: 14px;
+            line-height: 14px;
+            margin: 0;
+            margin-bottom: 8px;
+            color: $black;
+        }
+    }
+
+    &_description {
+        width: 100%;
+    }
+
+    &_about {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.2;
+        color: $black;
+    }
+
+    &_author {
+        font-size: 10px;
+        margin: 0;
+        line-height: 19px;
+        color: $grey;
+    }
+
+    &Metro {
+        & > div {
+            font-size: 12px;
+
+            &:first-child {
+                top: 5px;
+                transform: translateY(0);
+            }
+    
+            &:last-child {
+                margin-left: 15px;
+            }
+        }
+    }
+
+    &Social {
+        margin-top: auto;
+    }
+
+    &_footer {
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        padding-bottom: 15px;
+        justify-content: space-between;
+
+        a {
+            font-size: 12px;
+            line-height: 1.2;
+            text-decoration: underline;
+            color: $black;
+        }
+    }
+}
+    

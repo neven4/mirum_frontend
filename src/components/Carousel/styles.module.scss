@@ -1,0 +1,133 @@
+@import '../../styles/global.scss';
+
+// .slider {
+//     position: relative;
+//     padding-bottom: 100%;
+//     overflow: hidden;
+// }
+
+// .motion_container {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     z-index: 0;
+// }
+
+// .scale {
+//     height: 100%;
+//     background-color: rgb(235, 39, 39);
+// }
+
+
+
+
+// .slider_wrapper {
+//     display: flex;
+//     align-items: center;
+//     width: 100%;
+//     height: 100%;
+//     flex-direction: row;
+//     outline: 0;
+//     overflow-x: visible;
+//     touch-action: pan-y;
+//     transition-property: transform;
+//     will-change: transform;
+
+//     li {
+//         transition-duration: .05s,.3s;
+//         transition-property: opacity, width;
+//         transition-timing-function: linear,ease;
+//         display: block;
+//         flex: 0 0 auto;
+//         overflow: hidden;
+//         width: 100%;
+//         height: 100%;
+
+//         &:nth-child(2n) {
+//             background-color: #ccc;
+//         }
+//     }
+// }
+
+.slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.main {
+	background-color: #fff;
+	overflow: hidden;
+	position: relative;
+	
+	.photoCount {
+		position: absolute;
+		top: 13px;
+		right: 16px;
+		background-color: rgba(255, 255, 255, .5);
+		border-radius: 13px;
+		height: 23px;
+		width: 48px;
+		text-align: center;
+		line-height: 23px;
+		color: $black;
+		font-size: 12px;
+		z-index: 2;
+	}
+}
+  
+  .swiper {
+    display: flex;
+    overflow-x: visible;
+    transition-property: transform;
+    will-change: transform;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    flex-direction: row;
+    touch-action: pan-y;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+  }
+
+.swiper {
+    div {
+        flex: 0 0 auto;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+    div:nth-child(2n) {
+        
+        background-color: #ccc;
+    }
+}
+  
+  img {
+    object-fit: contain;
+  }
+  
+  .move {
+    display: flex;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 0;
+  }
+  
+  .back {
+    left: 5px;
+  }
+  .next {
+    right: 5px;
+  }
+

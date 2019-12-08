@@ -1,0 +1,20 @@
+@import '../../styles/global.scss';
+
+.like {
+    align-items: center;
+    display: flex;
+    user-select: none;
+
+    &_icon {
+        height: 18px;
+        width: 18px;
+    }
+
+    &_count {
+        color: $black;
+        margin-left: 5px;
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        line-height: 18px;
+    }
+}
