@@ -7,7 +7,7 @@ class Slider extends React.Component {
     isOy = null;
     lastTouch = 0;
     state = {
-        imgs: ["/img1.jpg", "/img2.jpg", "/img3.jpg", "/img4.jpg"],
+        imgs: [],
         currentIndex: 0,
         movement: 0,
         transitionDuration: "0s",
@@ -15,8 +15,10 @@ class Slider extends React.Component {
     };
 
     componentDidMount() {
+        console.log(this.props.images)
         this.setState({
-            imageWidth: window.innerWidth
+            imageWidth: window.innerWidth,
+            imgs: this.props.images
         })
     }
 
@@ -133,11 +135,11 @@ class Slider extends React.Component {
                         transitionDuration: transitionDuration,
                         }}
                     >
-                        
-                        <div />
-                        <div />
-                        <div />
-                        <div />
+                        {imgs.map((el, i) => {
+                            return <div key={i}
+                                style={{backgroundImage: `url(${el["1080"]})`}}
+                            />
+                        })}
                     </div>
                 {movement !== 0 && (
                     <button

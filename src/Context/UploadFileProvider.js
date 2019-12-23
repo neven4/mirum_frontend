@@ -6,10 +6,7 @@ class UploadFileProvider extends Component {
         width: '', 
         coords: null,
         placeCoords: null,
-        // cards: [
-        //     {
-        //     }
-        // ]
+        cards: []
     };
 
     updateState = (newState) => {

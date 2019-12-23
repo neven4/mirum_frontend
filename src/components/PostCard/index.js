@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
 
@@ -10,7 +11,11 @@ import Carousel from "../Carousel"
 
 
 const PostCard = props => {
+	const context = useContext(Context)
 	const [isLiked, setIsLiked] = useState(false)
+	const { id } = props.match.params
+
+	const postData = context.state.cards.find(el => el.id === id)
 
 	const handleLike = () => {
 		setIsLiked(!isLiked)
@@ -18,7 +23,7 @@ const PostCard = props => {
 
 	return (
 		<article className={ styles.postCard }>
-			<Carousel />
+			<Carousel images={postData.photos} />
 
 			<section className={ styles.postCardInfo }>
 				<p className={ styles.postCardAuthor }>
@@ -27,31 +32,27 @@ const PostCard = props => {
 
 				<div className={ styles.postCardTitle }>
 					<h1>
-						Coffee 3
+						{postData.title}
 					</h1>
 
 					<SocialIcons />
 				</div>
 
 				<Metro className={ styles.postCardAdress }
-					label='Петроградская, пр. Медиков, д.3'
+					label={postData.addressName}
 					withArrow={true}
 					withClick={true}
-					coords={[59.931105, 30.320476]}
+					coords={postData.addressCoord}
 				/>
 				
 				<Like active={ isLiked }
 					className={ styles.postCardLike }
 					click={ handleLike }
-					numOfLikes='24400'
+					numOfLikes={postData.likes}
 				/>
 		
 				<p className={ styles.postCardAbout }>
-					Когда в феврале 2018 года я узнал о перезапуске Coffee 3 и согласился туда пойти с другом, то совсем не ожидал, что меня поведут в подозрительный с первого взгляда двор, заведут в здание бывшего завода и заставят подняться там на 5 этаж... Дошел я тогда до туда только потому, что у меня в кошельке было мало налички и я решил, что в принципе терять нечего
-				</p>
-
-				<p className={ styles.postCardAbout }>
-					Но то ощущение, которое я испытал войдя в кофейню, хочется чувствовать каждый раз. Большое лофтовое двухэтажное помещение с неординарым видом из окна, отлично продуманное в плане свободного пространства, цветов, контрастов, с огромным крутым рисунком на стене, барной стойкой, которая, находясь в центре зала, излучает культуру кофе и ,тогда еще небольшим количеством улыбчивых людей — то, ради чего я прихожу в Cofee 3 и сегодня. 
+					{postData.mainText}
 				</p>
 			</section>
 		</article>

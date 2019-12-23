@@ -149,11 +149,13 @@ const PopAppMap = () => {
 					return localMap.setCenter(coords, 18)
 				}
 
-				const points = [
-					{coords: [59.931105, 30.320476], text: "tea", address: "Владимерская"},
-					{coords: [59.936913, 30.342883], text: "coffee", address: "Сенная"},
-					{coords: [59.943809, 30.353786], text: "kakao", address: "Восстания"}
-				]
+				const points = context.state.cards.map(el => {
+					return {
+						coords: el.addressCoord,
+						text: el.title,
+						address: el.addressName
+					}
+				})
 
 				const findPlaces = (arr, findName) => {
 					return arr.filter(value => {

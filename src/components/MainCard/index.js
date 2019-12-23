@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 import Like from '../Like';
 import Metro from '../Metro';
 
-const MainCard = () => {
+const MainCard = ({data}) => {
   const [isLiked, setIsLiked] = useState(false)
 
   const handleLike = () => {
@@ -15,20 +15,20 @@ const MainCard = () => {
 
   return (
     <section className={ styles.mainCard }>
-      <Link to='/post'
+      <Link to={`/post/${data.id}`}
         className={ styles.cardImage }
       >
         <div className={ styles.cardImage_container }
-          style={{backgroundImage: 'url(https://d2eip9sf3oo6c2.cloudfront.net/instructors/avatars/000/000/032/medium/oapgW_Fp_400x400.jpg)' }}/>
+          style={{backgroundImage: `url(${data.photos[0]["1080"]})` }}/>
       </Link>
 
       <div className={ styles.mainCard_footer }>
         <Like active={ isLiked }
           click={ handleLike }
-          numOfLikes='244'
+          numOfLikes={data.likes}
         />
 
-        <Metro label='Петроградская' />
+        <Metro label={data.metroName} />
       </div>
     </section>
   );
