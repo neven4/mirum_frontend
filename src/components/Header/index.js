@@ -1,36 +1,9 @@
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-const Header = ({ location, onFilterClick, filter, history }) => {
-	// const chooseHeader = () => {
-    // 	switch(location.pathname) {
-	//     case '/':
-
-      
-	// 	default: 
-	// 		return <li onClick={() => props.history.goBack()}>
-	// 			<div className={ styles.backIcon }>
-	// 				<svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-	// 				<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="11" height="18">
-	// 				<path fillRule="evenodd" clipRule="evenodd" d="M8.29488 0.350401L0.336279 7.99125C-0.112093 8.42109 -0.112093 9.13866 0.336279 9.57026L8.29488 17.2094C8.78296 17.678 9.55349 17.678 10.0416 17.2094C10.5579 16.7133 10.5579 15.8872 10.0416 15.3903L3.37603 8.99126C3.25511 8.87564 3.25511 8.68411 3.37603 8.56849L10.0416 2.16948C10.5579 1.67345 10.5579 0.847317 10.0416 0.350401C9.7971 0.117389 9.48288 0 9.16867 0C8.85357 0 8.53936 0.117389 8.29488 0.350401Z" fill="white"/>
-	// 				</mask>
-	// 				<g mask="url(#mask0)">
-	// 				<path fillRule="evenodd" clipRule="evenodd" d="M8.29488 0.350401L0.336279 7.99125C-0.112093 8.42109 -0.112093 9.13866 0.336279 9.57026L8.29488 17.2094C8.78296 17.678 9.55349 17.678 10.0416 17.2094C10.5579 16.7133 10.5579 15.8872 10.0416 15.3903L3.37603 8.99126C3.25511 8.87564 3.25511 8.68411 3.37603 8.56849L10.0416 2.16948C10.5579 1.67345 10.5579 0.847317 10.0416 0.350401C9.7971 0.117389 9.48288 0 9.16867 0C8.85357 0 8.53936 0.117389 8.29488 0.350401Z" fill="#2A2A2A"/>
-	// 				</g>
-	// 				</svg>
-	// 			</div>
-
-	// 			<span className={ styles.header_nav_title }>
-	// 				Назад
-	// 			</span>
-	// 		</li>
-	// 	}
-	// }
-
-	// let headreNav = chooseHeader()
-
+const Header = () => {
 	return (
 		<header className={ styles.header }>
 			<Link to="/" className={ styles.logo }>
@@ -55,4 +28,4 @@ const Header = ({ location, onFilterClick, filter, history }) => {
 	)
 }
 
-export default withRouter(Header);
+export default React.memo(Header);

@@ -1,23 +1,26 @@
 import React from 'react';
+import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
 
 class Slider extends React.Component {
+    static contextType = Context
+
     isOx = null;
     isOy = null;
     lastTouch = 0;
+    imageWidth = this.context.state.width
     state = {
         imgs: [],
         currentIndex: 0,
         movement: 0,
         transitionDuration: "0s",
-        imageWidth: null
+        // imageWidth: null
     };
 
     componentDidMount() {
-        console.log(this.props.images)
         this.setState({
-            imageWidth: window.innerWidth,
+            // imageWidth: this.context.state.width,
             imgs: this.props.images
         })
     }
@@ -67,8 +70,8 @@ class Slider extends React.Component {
             nextMovement = 0;
         }
 
-        if (nextMovement > maxLength * this.state.imageWidth) {
-            nextMovement = maxLength * this.state.imageWidth;
+        if (nextMovement > maxLength * this.imageWidth) {
+            nextMovement = maxLength * this.imageWidth;
         }
 
         this.setState({
@@ -80,7 +83,7 @@ class Slider extends React.Component {
     handleMovementEnd = () => {
         const { movement, currentIndex } = this.state;
 
-        const endPosition = movement / this.state.imageWidth;
+        const endPosition = movement / this.imageWidth;
         const endPartial = endPosition % 1;
         const endingIndex = endPosition - endPartial;
         const deltaInteger = endingIndex - currentIndex;
@@ -104,65 +107,81 @@ class Slider extends React.Component {
     transitionTo = (index, duration) => {
         this.setState({
         currentIndex: index,
-        movement: index * this.state.imageWidth,
+        movement: index * this.imageWidth,
         transitionDuration: `${duration}s`,
         });
     }
     render() {
         const { currentIndex, movement, transitionDuration, imgs } = this.state;
         const maxLength = imgs.length - 1;
-        const maxMovement = maxLength * this.state.imageWidth;
+        const maxMovement = maxLength * this.imageWidth;
 
         return (
-            <div className={ styles.slider}>
-                <div
-                    className={styles.main}
-                    style={{
-                        width: `${this.state.imageWidth}px`,
-                        height: `${this.state.imageWidth}px`,
-                    }}
-                    onTouchStart={this.handleTouchStart}
-                    onTouchMove={this.handleTouchMove}
-                    onTouchEnd={this.handleTouchEnd}
-                >
-                    <div className={styles.photoCount}>
-                        {`${currentIndex + 1}/${maxLength + 1}`}
-                    </div>
-
-                    <div className={styles.swiper}
+            <>
+                <div className={ styles.slider}>
+                    <div
+                        className={styles.main}
                         style={{
-                        transform: `translateX(${movement * -1}px)`,
-                        transitionDuration: transitionDuration,
+                            width: `${this.imageWidth}px`,
+                            height: `${this.imageWidth}px`,
                         }}
+                        onTouchStart={this.handleTouchStart}
+                        onTouchMove={this.handleTouchMove}
+                        onTouchEnd={this.handleTouchEnd}
                     >
-                        {imgs.map((el, i) => {
-                            return <div key={i}
-                                style={{backgroundImage: `url(${el["1080"]})`}}
-                            />
-                        })}
+                        <div className={styles.photoCount}>
+                            {`${currentIndex + 1}/${maxLength + 1}`}
+                        </div>
+
+                        <div className={styles.swiper}
+                            style={{
+                                transform: `translateX(${movement * -1}px)`,
+                                transitionDuration: transitionDuration,
+                            }}
+                        >
+                            {imgs.map((el, i) => {
+                                return <div key={i}
+                                    className={styles.imageHolder}
+                                >
+                                    <img
+                                        decoding="auto"
+                                        sizes="(max-width: 500px) 640px, (min-width: 501px) 1080w"
+                                        srcSet={`${el["640"]} 640w, ${el["1080"]} 1080w`}
+                                        src={el.source}
+                                        style={{objectFit: "cover"}}
+                                    />
+                                </div>
+                            })}
+                        </div>
+                    {movement !== 0 && (
+                        <button
+                        className="back move"
+                        onClick={() => {
+                            this.transitionTo(currentIndex - 1, 0.5);
+                        }}
+                        >
+                        ←
+                        </button>
+                    )}
+                    {movement !== maxMovement && (
+                        <button
+                        className="next move"
+                        onClick={() => {
+                            this.transitionTo(currentIndex + 1, 0.5);
+                        }}
+                        >
+                        →
+                        </button>
+                    )}
                     </div>
-                {movement !== 0 && (
-                    <button
-                    className="back move"
-                    onClick={() => {
-                        this.transitionTo(currentIndex - 1, 0.5);
-                    }}
-                    >
-                    ←
-                    </button>
-                )}
-                {movement !== maxMovement && (
-                    <button
-                    className="next move"
-                    onClick={() => {
-                        this.transitionTo(currentIndex + 1, 0.5);
-                    }}
-                    >
-                    →
-                    </button>
-                )}
                 </div>
-            </div>
+                <p className={ styles.authorText }>
+                    {imgs && imgs[currentIndex] && imgs[currentIndex].author
+                        ? `${imgs[currentIndex]["author"]}`
+                        : ""
+                    }
+				</p>
+            </>
         );
     }
 }

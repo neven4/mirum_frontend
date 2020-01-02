@@ -4,6 +4,14 @@
     padding: 62px 10px 67px;
     position: relative;
 
+    h2 {
+        font-size: 18px;
+        line-height: 24px;
+        margin: 0;
+        margin-bottom: 13px;
+        color: $black;
+    }
+
     &_container {
         display: grid;
         grid-template-columns: 1fr 1fr;

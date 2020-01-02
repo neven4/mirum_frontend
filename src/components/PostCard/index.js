@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
@@ -6,57 +6,58 @@ import styles from './styles.module.scss';
 import Like from '../Like';
 import Metro from '../Metro';
 import SocialIcons from '../SocialIcons';
-
 import Carousel from "../Carousel"
 
 
 const PostCard = props => {
 	const context = useContext(Context)
-	const [isLiked, setIsLiked] = useState(false)
-	const { id } = props.match.params
+	const id = props.data ? props.data.id : props.match.params.id
 
-	const postData = context.state.cards.find(el => el.id === id)
+	const postData = props.data
+		? props.data
+		: context.state.cafes.read().find(el => el.id === id)
 
-	const handleLike = () => {
-		setIsLiked(!isLiked)
-	}
+	const {
+		title,
+		addressName,
+		addressCoord,
+		likes,
+		mainText,
+		photos
+	} = postData
 
 	return (
 		<article className={ styles.postCard }>
-			<Carousel images={postData.photos} />
+			<Carousel images={photos} />
 
 			<section className={ styles.postCardInfo }>
-				<p className={ styles.postCardAuthor }>
-					Источник: кофе.рф
-				</p>
-
 				<div className={ styles.postCardTitle }>
 					<h1>
-						{postData.title}
+						{title}
 					</h1>
 
 					<SocialIcons />
 				</div>
 
 				<Metro className={ styles.postCardAdress }
-					label={postData.addressName}
+					label={addressName}
 					withArrow={true}
 					withClick={true}
-					coords={postData.addressCoord}
+					coords={addressCoord}
 				/>
 				
-				<Like active={ isLiked }
+				<Like
 					className={ styles.postCardLike }
-					click={ handleLike }
-					numOfLikes={postData.likes}
+					numOfLikes={likes}
+					id={id}
 				/>
 		
 				<p className={ styles.postCardAbout }>
-					{postData.mainText}
+					{mainText}
 				</p>
 			</section>
 		</article>
 	)
 }
 
-export default PostCard;
+export default React.memo(PostCard);

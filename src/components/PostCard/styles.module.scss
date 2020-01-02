@@ -24,21 +24,20 @@
     }
 
     &Info {
-        padding: 0 10px 20px 10px;
+        padding: 7px 10px 20px 10px;
     }
 
-    &Author {
-        font-size: 12px;
-        margin: 0;
-        line-height: 16px;
-        color: $grey;
-    }
+    // &Author {
+    //     font-size: 12px;
+    //     margin: 0;
+    //     line-height: 16px;
+    //     color: $grey;
+    // }
 
     &Title {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 5px;
 
         h1 {
             color: $black;

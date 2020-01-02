@@ -1,25 +1,24 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Context from '../../Context/Context';
-import styles from './styles.module.scss';
-import placemark from '../../images/placemark.png'
-import SmallInfo from '../ModalSmallInfo';
-import PostCard from '../PostCard';
 
-const PopAppMap = () => {
+import styles from './styles.module.scss';
+
+import placemark from '../../images/placemark.png'
+import MapModal from '../MapModal';
+
+const MapPage = props => {
 	const context = useContext(Context)
+	const cafes = context.state.cafes.read()
+	const urlCoords = props.match.params.coords
+	let localMap = null
+
 	const [isLoading, setIsLoading] = useState(true)
 	const [modalType, setModalType] = useState("")
-	const [getMoveStarted, setMoveStarted] = useState(false)
 	const [modalHeight, setModalHeight] = useState(0)
-	const [localMapId, setLocalMap] = useState(null)
+	const [modalData, setModalData] = useState(null)
+	const [localMapId, setLocalMapId] = useState(null)
 	const [isSearchShow, setSearchShow] = useState(false)
 	const [searchValue, setSearchValue] = useState("")
-	let localMap = null
-	let startY = null
-
-	const kek = el => {
-		setModalType("small")
-	}
 
   	useEffect(() => {
 		let mapHeight
@@ -149,11 +148,12 @@ const PopAppMap = () => {
 					return localMap.setCenter(coords, 18)
 				}
 
-				const points = context.state.cards.map(el => {
+				const points = cafes.map(el => {
 					return {
 						coords: el.addressCoord,
 						text: el.title,
-						address: el.addressName
+						address: el.addressName,
+						data: el
 					}
 				})
 
@@ -224,7 +224,7 @@ const PopAppMap = () => {
 						let placemark = createPlacemark(el.coords)
 						placemark.events.add('click', e => {
 							localMap.setCenter(el.coords, 18, {})
-							kek(el.coords)
+							openSmallModal(el.data)
 							e.stopPropagation()
 						})
 
@@ -235,47 +235,30 @@ const PopAppMap = () => {
 				localMap.geoObjects.add(clusterer);
 				localMap.setBounds(clusterer.getBounds(), {});
 
-				setLocalMap(localMap)
+				setLocalMapId(localMap)
 			}
 		})
 	}, [])
 
 	useEffect(() => {
-		if (context.state.placeCoords && localMapId) {
-			localMapId.setCenter(context.state.placeCoords, 18)
-			kek(context.state.placeCoords)
+		if (urlCoords && localMapId) {
+			const parsedUrlCoords = urlCoords.split(",")
+			localMapId.setCenter(parsedUrlCoords, 14)
+			openSmallModal(parsedUrlCoords)
 		}
 	}, [localMapId])
 
-	const handleTouchStart = e => {
-		startY = e.nativeEvent.touches[0].clientY
-	};
-
-	const handleTouchMove = e => {
-		const delta = startY - e.nativeEvent.touches[0].clientY
-
-		if (!getMoveStarted) {
-			handleMovement(delta)
-		}
-	};
-
-	const handleTouchEnd = () => {
-		setMoveStarted(false)
-		startY = 0;
+	const openSmallModal = el => {
+		setModalData(el)
+		setModalType("small")
 	}
 
-	const handleMovement = delta => {
-		setMoveStarted(true)
-
-		if (delta > 0 && modalType === "small") {
-			setModalType("full")
-		} else if (delta < 0 && modalType === "full") {
-			setModalType("small")
-		}
+	const onCloseModal = () => {
+		setModalType("")
 	}
 
 	return (
-		<section className={ styles.popAppMap }>
+		<section className={ styles.mapPage }>
 			{isLoading
 				? <span>isLodaing...</span>
 				: <>
@@ -311,61 +294,20 @@ const PopAppMap = () => {
 						<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8.48528" cy="8.73218" r="5" transform="rotate(-45 8.48528 8.73218)" stroke="#727272" strokeWidth="2"/><path d="M12.3743 12.6212L16.2634 16.5103" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
 					</div>
 
-					<div id="map" style={{flexGrow: 1, backgroundColor: "#fff"}}></div>
+					<div id="map" style={{flexGrow: 1, backgroundColor: "#fff"}} />
 
-				<div className={styles.mapModalWindow}
-					style={{
-						bottom: `-${modalHeight}px`,
-						height: `${modalHeight}px`,
-						transform: modalType === "small"
-							? `translateY(-216px)`
-							: modalType === "full"
-								? `translateY(-${modalHeight}px)`
-								: `translateY(0)`
-					}}
-				>
-				<div className={styles.mapModalHeader}
-					onTouchStart={handleTouchStart}
-					onTouchMove={handleTouchMove}
-					onTouchEnd={handleTouchEnd}
-				>
-					<div className={styles.mapModalHeader_arrow}
-						onClick={() => {
-							modalType === "full"
-							? setModalType("small")
-							: setModalType("full")
-						}}
-					>
-						<svg transform={modalType === "full" ? `rotate(180)` : `rotate(0)`}
-							width="20" height="8" viewBox="0 0 20 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M1 7L10 1L19 7" stroke="#727272" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-						</svg>
-					</div>
-				</div>
-
-				<div className={styles.mapModalHeader_close}
-					onClick={() => setModalType("")}
-				>
-					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M15 1L1 15M1 1L15 15" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-					</svg>
-				</div>
-
-				<div className={styles.mapModalBody}
-					style={{
-					overflowY: modalType === "full" ? "scroll" : "hidden"
-					}}
-				>
-					{modalType === "full"
-						? <PostCard />
-						: <SmallInfo />
+					{modalData &&
+						<MapModal
+							height={modalHeight}
+							type={modalType}
+							data={modalData}
+							onClose={onCloseModal}
+						/>
 					}
-				</div>
-				</div>
-			</>
+				</>
 			}
 		</section>
 	)
 }
 
-export default PopAppMap;
+export default React.memo(MapPage);

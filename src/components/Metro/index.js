@@ -15,10 +15,11 @@ const Metro = props => {
 	} = props
 
 	const onMetroClick = () => {
-		context.update({
-			placeCoords: coords
-		})
-		props.history.push('/map')
+		console.log(coords)
+		// context.update({
+		// 	placeCoords: coords
+		// })
+		props.history.push(`/map/${coords}`)
 	}
 
 	return (
@@ -44,4 +45,4 @@ const Metro = props => {
 	);
 }
 
-export default withRouter(Metro);
+export default withRouter(React.memo(Metro));

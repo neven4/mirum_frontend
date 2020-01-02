@@ -6,15 +6,17 @@ import MainCard from '../MainCard';
 
 const Main = () => {
 	const context = useContext(Context)
+
+	const cafes = context.state.cafes.read()
 	
 	return (
 			<main className={ styles.main }>
+				<h2>Лучшее</h2>
+
 				<article className={ styles.main_container }>
-					{context.state.cards.length > 0 &&
-						context.state.cards.map((el, i) => {
-							return <MainCard data={el} key={`mainCard_${i}`}/>
-						})
-					}
+					{cafes && cafes.map((el, i) => 
+						<MainCard data={el} key={`mainCard_${i}`}/>
+					)}
 				</article>
 			</main>
 	)

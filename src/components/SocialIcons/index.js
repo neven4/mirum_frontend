@@ -99,4 +99,4 @@ const SocialIcons = ({className}) => {
     )
 }
 
-export default SocialIcons;
+export default React.memo(SocialIcons);

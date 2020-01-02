@@ -1,56 +1,5 @@
 @import '../../styles/global.scss';
 
-// .slider {
-//     position: relative;
-//     padding-bottom: 100%;
-//     overflow: hidden;
-// }
-
-// .motion_container {
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//     bottom: 0;
-//     z-index: 0;
-// }
-
-// .scale {
-//     height: 100%;
-//     background-color: rgb(235, 39, 39);
-// }
-
-
-
-
-// .slider_wrapper {
-//     display: flex;
-//     align-items: center;
-//     width: 100%;
-//     height: 100%;
-//     flex-direction: row;
-//     outline: 0;
-//     overflow-x: visible;
-//     touch-action: pan-y;
-//     transition-property: transform;
-//     will-change: transform;
-
-//     li {
-//         transition-duration: .05s,.3s;
-//         transition-property: opacity, width;
-//         transition-timing-function: linear,ease;
-//         display: block;
-//         flex: 0 0 auto;
-//         overflow: hidden;
-//         width: 100%;
-//         height: 100%;
-
-//         &:nth-child(2n) {
-//             background-color: #ccc;
-//         }
-//     }
-// }
-
 .slider {
     display: flex;
     align-items: center;
@@ -103,12 +52,26 @@
         background-size: cover;
     }
 }
-  
+
+.imageHolder {
+  overflow: hidden;
+  padding-bottom: 100%;
+
   img {
-    object-fit: contain;
+    // width: 100%;
+    // height: 100%;
+    user-select: none;
+    // position: absolute;
+    // left: 0;
+    // top: 0;
   }
+}
   
-  .move {
+img {
+    object-fit: contain;
+}
+  
+.move {
     display: flex;
     position: absolute;
     width: 40px;
@@ -121,12 +84,21 @@
     justify-content: center;
     cursor: pointer;
     border: 0;
-  }
+}
+
+.authorText {
+	font-size: 12px;
+	margin: 0 10px;
+	line-height: 16px;
+	color: $grey;
+	min-height: 18px;
+}
   
-  .back {
+.back {
     left: 5px;
-  }
-  .next {
+}
+
+.next {
     right: 5px;
-  }
+}
 
