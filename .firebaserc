@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "mirum-e30cc"
+  },
+  "targets": {
+    "mirum-e30cc": {
+      "hosting": {
+        "dev": [
+          "mirumplaces-dev"
+        ],
+        "release": [
+          "mirum-e30cc"
+        ]
+      }
+    }
   }
 }

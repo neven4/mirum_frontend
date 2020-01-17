@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-// import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
 
@@ -26,7 +25,10 @@ const MainCard = ({ data }) => {
 					id={data.id}
 				/>
 
-				<Metro label={data.metroName} />
+				<Metro
+					metro={data.metroName}
+					label={data.metroName}
+				/>
 			</div>
 		</section>
 	);

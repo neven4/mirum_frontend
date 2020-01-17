@@ -9,38 +9,25 @@
     position: fixed;
     width: 100%;
     z-index: 10000;
+}
 
-    &_nav {
-        align-items: center;
-        display: flex;
-        height: 100%;
-        flex-grow: 1;
+@media (min-width: 651px) {
+    .header {
+        height: 60px;
 
-        li {
-            display: flex;
-            cursor: pointer;
-            font-family: 'Roboto', sans-serif;
-            font-size: 14px;
-            line-height: 45px;
+        .logo {
+            margin-left: 30px;
 
-            &:not(:first-child) {
-                margin-left: 15px;
+            svg {
+                width: 91px;
+                height: 40px;
             }
         }
 
-        &_title {
-            margin-left: 10px;
-            font-size: 16px;
+        .instagram  {
+            margin-right: 20px;
         }
-
-        &_next {
-            margin-left: auto !important;
-    
-            span {
-                font-weight: 700;
-            }
-        }
-    } 
+    }
 }
 
 .active {

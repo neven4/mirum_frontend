@@ -11,6 +11,13 @@
     flex-direction: column;
 }
 
+@media (min-width: 651px) {
+    .mapPage {
+        top: 60px;
+        bottom: 0;
+    }
+}
+
 .map {
     position: relative;
     height: 100%;

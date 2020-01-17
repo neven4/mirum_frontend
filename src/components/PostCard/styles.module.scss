@@ -57,8 +57,6 @@
     }
 
     &Like {
-        margin-top: 15px;
-
         & > div {
             font-size: 14px;
 
@@ -67,6 +65,20 @@
                 height: 24px;
             }
         }
+
+        &Container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+    }
+
+    &InstagramLink {
+        color: $black;
+        font-size: 12px;
+        line-height: 120%;
+        text-decoration: underline;
     }
 
     &About {

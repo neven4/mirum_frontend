@@ -72,19 +72,35 @@ img {
 }
   
 .move {
-    display: flex;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.5);
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 0;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    border-radius: 50%;
+    background-color: rgba($grey, 0.6);
+	border: 0;
+	
+	&Container {
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		cursor: pointer;
+
+		&_left {
+			left: 0;
+		}
+		&_right {
+			right: 0;
+		}
+	}
 }
+
 
 .authorText {
 	font-size: 12px;

@@ -5,12 +5,13 @@ import styles from './styles.module.scss';
 
 import Like from '../Like';
 import Metro from '../Metro';
-import SocialIcons from '../SocialIcons';
+import ShareBtn from '../ShareBtn';
 import Carousel from "../Carousel"
 
 
 const PostCard = props => {
 	const context = useContext(Context)
+	console.log(props)
 	const id = props.data ? props.data.id : props.match.params.id
 
 	const postData = props.data
@@ -20,10 +21,12 @@ const PostCard = props => {
 	const {
 		title,
 		addressName,
-		addressCoord,
 		likes,
 		mainText,
-		photos
+		photos,
+		smallText,
+		instagramLink,
+		metroName
 	} = postData
 
 	return (
@@ -36,22 +39,41 @@ const PostCard = props => {
 						{title}
 					</h1>
 
-					<SocialIcons />
+					<ShareBtn
+						page={props.data ? "map" : "post"}
+						id={id}
+					/>
 				</div>
 
 				<Metro className={ styles.postCardAdress }
 					label={addressName}
-					withArrow={true}
-					withClick={true}
-					coords={addressCoord}
-				/>
-				
-				<Like
-					className={ styles.postCardLike }
-					numOfLikes={likes}
+					metro={metroName}
+					withArrow={props.disableAddress ? false : true}
+					withClick={props.disableAddress ? false : true}
 					id={id}
 				/>
+				
+				<div className={ styles.postCardLikeContainer }>
+					<Like
+						className={ styles.postCardLike }
+						numOfLikes={likes}
+						id={id}
+					/>
+
+					<a
+						className={ styles.postCardInstagramLink }
+						href={instagramLink ? instagramLink : ""}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Instagram
+					</a>
+				</div>
+				
 		
+				<p className={ styles.postCardAbout }>
+					{smallText}
+				</p>
 				<p className={ styles.postCardAbout }>
 					{mainText}
 				</p>

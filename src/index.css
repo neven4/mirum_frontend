@@ -33,6 +33,10 @@ code {
   box-shadow: 1px 2px 8px rgba(40, 40, 40, 0.25);
 }
 
+.map-round-btn:active {
+  background-color: #F6F6F6;
+}
+
 .map-round-btn-sm {
   width: 35px;
   height: 35px;

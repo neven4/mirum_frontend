@@ -35,11 +35,11 @@ const Like = ({ numOfLikes, className, id }) => {
 
 		}
 
-		// fetch(`https://europe-west1-mirum-e30cc.cloudfunctions.net/api/cafes/${id}/like/${likeState}`,
-		// 	{ method: "PUT" }
-		// )
-		// 	.then(res => res.json())
-		// 	.then(data => setLikesNum(data.likes))
+		fetch(`https://europe-west1-mirum-e30cc.cloudfunctions.net/api/cafes/${id}/like/${likeState}`,
+			{ method: "PUT" }
+		)
+			.then(res => res.json())
+			.then(data => setLikesNum(data.likes))
 	}
 
 	return (

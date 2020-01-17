@@ -10,7 +10,11 @@ class AppProvider extends Component {
         coords: null,
         placeCoords: null,
         cafes: cafes,
-        likedCafes: []
+        likedCafes: [],
+        shareModalOpen: false,
+        shareModalPage: null,
+        shareModalId: null,
+        device: null
     };
 
     componentDidMount() {
@@ -27,6 +31,13 @@ class AppProvider extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const {width} = this.state
+        if (prevState.width !== width) {
+            this.setDevice(width)
+        }
+    }
+
     componentWillUnmount() {
         this.saveToStorage()
         window.removeEventListener("resize", this.updateScreenWidth)
@@ -38,10 +49,32 @@ class AppProvider extends Component {
     }
 
     updateScreenWidth = () => {
+        const width = window.innerWidth
 		this.setState({
-			width: window.innerWidth
-		})
-	}    
+			width
+		}, () => {
+            if (!this.state.device) {
+                this.setDevice(width)
+            }
+        })
+    }
+    
+    setDevice = (width) => {
+        let device = ""
+        if (width <= 650) {
+            device = "mobile"
+        } else if (width > 650 && width < 1100) {
+            device = "tablet"
+        } else if (width >= 1100) {
+            device = "desktop"
+        }
+
+        if (device !== this.state.device) {
+            this.setState({
+                device
+            })
+        }
+    }
 
     updateState = (newState) => {
         this.setState({...this.state, ...newState})

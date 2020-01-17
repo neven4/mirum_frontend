@@ -6,9 +6,9 @@ import styles from './styles.module.scss';
 const Footer = props => {
 	const {pathname} = props.location
 	return (
-		<footer className={ styles.footer }>
+		<footer className={ `${styles.footer} ${props.inHeader ? styles.footer_inHeader : ""}` }>
 			<nav>
-				<ul className={ styles.footer_nav }>
+				<ul className={ `${styles.footer_nav} ${props.inHeader ? styles.footer_nav_inHeader : ""}` }>
 					<li>
 						<Link to='/'>
 							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

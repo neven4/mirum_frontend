@@ -144,35 +144,50 @@ class Slider extends React.Component {
                                     className={styles.imageHolder}
                                 >
                                     <img
+                                        alt={`Cafe img num. ${i}. author: ${el.author}`}
                                         decoding="auto"
-                                        sizes="(max-width: 500px) 640px, (min-width: 501px) 1080w"
-                                        srcSet={`${el["640"]} 640w, ${el["1080"]} 1080w`}
+                                        sizes="(max-width: 374px) 640w, (max-width: 699px) 750w, (min-width: 700px) 1080w"
+                                        srcSet={`${el["640"]} 640w, ${el["750"]} 750w, ${el["1080"]} 1080w`}
                                         src={el.source}
                                         style={{objectFit: "cover"}}
                                     />
                                 </div>
                             })}
                         </div>
-                    {movement !== 0 && (
-                        <button
-                        className="back move"
-                        onClick={() => {
-                            this.transitionTo(currentIndex - 1, 0.5);
-                        }}
+                    {movement !== 0 &&
+                        <div
+                            className={`${styles.moveContainer} ${styles.moveContainer_left}`} 
+                            onClick={() => {
+                                this.transitionTo(currentIndex - 1, 0.5);
+                            }}
                         >
-                        ←
-                        </button>
-                    )}
-                    {movement !== maxMovement && (
-                        <button
-                        className="next move"
-                        onClick={() => {
-                            this.transitionTo(currentIndex + 1, 0.5);
-                        }}
+                            <button
+                                className={styles.move} 
+                            >
+                                <svg width="6" height="8" viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.11108 0.666626L0.777751 3.99996L4.11108 7.33329" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                    }
+                    {movement !== maxMovement &&
+                        <div
+                            className={`${styles.moveContainer} ${styles.moveContainer_right}`} 
+                            onClick={() => {
+                                this.transitionTo(currentIndex + 1, 0.5);
+                            }}
                         >
-                        →
-                        </button>
-                    )}
+                            <button
+                                className={styles.move}
+                            >
+                                <svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0.888916 0.666626L4.22225 3.99996L0.888916 7.33329" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                    }
                     </div>
                 </div>
                 <p className={ styles.authorText }>

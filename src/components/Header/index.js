@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
+import Context from "../../Context/Context"
+import Footer from "../Footer"
 
 import styles from './styles.module.scss';
 
 const Header = () => {
+	const context = useContext(Context)
+	const {device} = context.state
+
 	return (
 		<header className={ styles.header }>
 			<Link to="/" className={ styles.logo }>
@@ -12,6 +17,10 @@ const Header = () => {
 					<path fillRule="evenodd" clipRule="evenodd" d="M0 11.1374C-1.50049e-06 14.0079 4.26186 23 6.47528 23C8.68869 23 13 14.2458 13 11.1374C13 8.02908 10.5553 5 6.47528 5C2.39523 5 1.50049e-06 8.26696 0 11.1374ZM6.4801 21.2737C4.69857 21.2737 1.26829 13.6185 1.26829 11.3048C1.26829 8.99104 3.19616 6.35776 6.4801 6.35776C9.76405 6.35776 11.7317 8.7993 11.7317 11.3048C11.7317 13.8102 8.26163 21.2737 6.4801 21.2737Z" fill="#D83A3A"/>
 				</svg>
 			</Link>
+
+			{device !== "mobile" &&
+				<Footer inHeader={true} />
+			}
 
 			<a href="https://www.instagram.com"
 				className={ styles.instagram }
