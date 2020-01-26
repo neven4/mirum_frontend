@@ -4,8 +4,7 @@ import Context from '../../Context/Context';
 import styles from './styles.module.scss';
 
 import placemark from '../../images/placemark.png'
-// import pep from '../../images/geoPos.png'
-import kek from '../../images/geo.svg'
+import geoPosImg from '../../images/geoPos.png'
 import MapModal from '../MapModal';
 import MapTabletFullModal from '../MapTabletFullModal';
 import Spiner from "../Spiner"
@@ -148,7 +147,7 @@ const MapPage = props => {
 							const mark = new window.ymaps.Placemark(el.geoObjects.position, {}, {
 								draggable: false,
 								iconLayout: 'default#image',
-								iconImageHref: kek,
+								iconImageHref: geoPosImg,
 								iconImageSize: [24, 24],
 								iconImageOffset: [-12, -12]
 							});

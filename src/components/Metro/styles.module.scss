@@ -32,6 +32,13 @@
     }
 }
 
+.labelFitSmall {
+    overflow: hidden;
+    max-width: 90px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .withClick {
     cursor: pointer;
 }

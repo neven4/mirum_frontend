@@ -46,6 +46,7 @@ const MainCard = ({ data }) => {
 				<Metro
 					metro={data.metroName}
 					label={data.metroName}
+					fitSmall={width < 170}
 				/>
 			</div>
 		</section>

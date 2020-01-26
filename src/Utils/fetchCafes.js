@@ -6,15 +6,19 @@ function fetchCafes() {
         .then((res) => {
             resCopy = res.clone()
 
-            caches.open("mirum-cache").then(function(cache) {
-                cache.put("cafesData", resCopy);
-            });
+            if (window.caches) {
+                window.caches.open("mirum-cache").then(function(cache) {
+                    cache.put("cafesData", resCopy);
+                });
+            }
 
             return res.json()
         })
         .catch(() => {
-            return caches.match("cafesData")
-                .then(response => response.json())
+            if (window.caches) {
+                return window.caches.match("cafesData")
+                    .then(response => response.json())
+            }
         })
   
     return fetchPromise(promise)

@@ -10,7 +10,8 @@ const Metro = props => {
 		withClick = false,
 		label,
 		withArrow = false,
-		metro
+		metro,
+		fitSmall
 	} = props
 
 	const onMetroClick = () => {
@@ -51,7 +52,7 @@ const Metro = props => {
 			case "Невский пр.":
 			case "Сенная Площадь":
 			case "Фрунзенская":
-			case "Московские вор.":
+			case "Московские Вор.":
 			case "Электросила":
 			case "Парк победы":
 			case "Московская":
@@ -112,7 +113,7 @@ const Metro = props => {
 				style={{backgroundColor: getMetroColor()}}
 			/>
 
-			<div className={ styles.metro_label }>
+			<div className={ `${styles.metro_label} ${fitSmall ? styles.labelFitSmall : ""}` }>
 				{label}
 			</div>
 

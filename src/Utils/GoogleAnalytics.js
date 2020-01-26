@@ -5,7 +5,6 @@ import { Route } from 'react-router-dom';
 
 class GoogleAnalytics extends Component {
     componentDidMount () {
-        console.log("didmount")
         this.logPageChange(
             this.props.location.pathname,
             this.props.location.search
@@ -23,7 +22,6 @@ class GoogleAnalytics extends Component {
     }
 
     logPageChange (pathname, search = '') {
-        console.log(pathname)
         const page = pathname + search;
         const { location } = window;
         ReactGA.set({
@@ -54,9 +52,8 @@ const init = (options = {}) => {
     const isGAEnabled = true;
 
     if (isGAEnabled) {
-        ReactGA.initialize("G-5NEVNS5E0H");
+        ReactGA.initialize("UA-156965166-1");
     }
-    console.log(isGAEnabled)
     return isGAEnabled;
 };
 
