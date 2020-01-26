@@ -105,7 +105,7 @@ const Metro = props => {
 	}
 
 	return (
-		<section className={ `${ styles.metro } ${ className }`}
+		<section className={ `${ styles.metro } ${ withClick ? styles.withClick : "" } ${ className }`}
 			onClick={withClick ? onMetroClick : null}
 		>
 			<div className={ styles.metro_icon }

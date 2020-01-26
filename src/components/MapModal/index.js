@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 import SmallInfo from '../ModalSmallInfo';
 import PostCard from '../PostCard';
 
-const MapModal = ({ type, height, data, onClose }) => {
+const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 	const context = useContext(Context)
 
 	const [modalType, setModalType] = useState("")
@@ -15,7 +15,11 @@ const MapModal = ({ type, height, data, onClose }) => {
 	const {device} = context.state
 
 	useEffect(() => {
-		setModalType(type)
+		if (device !== "mobile" && type === "full") {
+			setModalType("")
+		} else {
+			setModalType(type)
+		}
 	}, [type])
 
 	const handleTouchStart = e => {
@@ -121,11 +125,11 @@ const MapModal = ({ type, height, data, onClose }) => {
 								onClick={() => {
 									modalType === "full"
 										? setModalType("small")
-										: setModalType("full")
+										: onFullModal()
 								}}
 							>
 								<svg width="8" height="20" viewBox="0 0 8 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M1 1L7 10L0.999999 19" stroke="#727272" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+									<path d="M1 1L7 10L0.999999 19" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
 								</svg>
 							</div>
 						}

@@ -1,90 +1,49 @@
 @import '../../styles/global.scss';
 
-.mapModal {
+.mapFullModal {
     &Window {
-        width: 100%;
-        max-width: 680px;
-        margin: 0 auto;
+        width: 400px;
         background-color: #fff;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
         box-shadow: 0px -2px 8px rgba(92, 92, 92, 0.25);
         bottom: 0;
         left: 0;
-        right: 0;
+        top: 0;
         position: absolute;
         transition: transform 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
-        z-index: 6000; 
+        z-index: 6000;
+        transform: translateX(-426px);
+        animation-name: open;
+        animation-duration: .3s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
     }
 
-    &Header {
+    &LessBtn {
+        width: 26px;
         height: 35px;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        position: relative;
-        flex: 0 0 auto;
-
-        &_close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 6100; 
-        }
-
-        &_arrow {
-            top: 12px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            svg {
-                transition: all 0.3s ease-in-out;
-            }
-        }
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 20px;
+        right: -26px;
+        box-shadow: 0px 1px 8px rgba(92, 92, 92, 0.25);
+        cursor: pointer;
     }
 
     &Body {
         flex-grow: 1;
         position: relative;
+        overflow-y: scroll;
         -webkit-overflow-scrolling: touch;
 
         & > article {
             padding: 0;
-            animation-name: open;
-            animation-duration: .3s;
-            animation-timing-function: ease-out;
-        }
-    }
-
-    &_arrowTablet {
-        padding-right: 20px;
-        padding-left: 10px;
-        display: flex;
-        align-items: center;
-    }
-}
-
-.smallInfoContainer {
-    display: flex;
-    position: relative;
-}
-
-@media (min-width: 651px) {
-    .mapModal {    
-        &Header {
-            height: 20px;
         }
     }
 }
@@ -93,14 +52,17 @@
     0% {
         display: none;
         opacity: 0;
+        transform: translateX(-426px);
     }
 
     1% {
         display: block;
         opacity: 0;
     }
+
     100% {
         display: block;
         opacity: 1;
+        transform: translateX(0);
     }
 }

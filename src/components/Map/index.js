@@ -8,6 +8,7 @@ import placemark from '../../images/placemark.png'
 import kek from '../../images/geo.svg'
 import MapModal from '../MapModal';
 import MapTabletFullModal from '../MapTabletFullModal';
+import Spiner from "../Spiner"
 
 const MapPage = props => {
 	const context = useContext(Context)
@@ -286,8 +287,21 @@ const MapPage = props => {
 		setModalType("")
 	}
 
+	const onSmallModal = () => {
+		setModalType("small")
+	}
+
+	const onFullModal = () => {
+		setModalType("full")
+	}
+
 	return (
 		<section className={ styles.mapPage }>
+			{isLoading &&
+				<div className={ styles.mapPageLoading }>
+					<Spiner />
+				</div>
+			}
 
 			<div className={`map-input-container ${isSearchShow ? "show-input" : ""}`}>
 				<div className="search-input-body">
@@ -329,17 +343,16 @@ const MapPage = props => {
 					type={modalType}
 					data={modalData}
 					onClose={onCloseModal}
+					onFullModal={onFullModal}
 				/>
 			}
 
-			{/* {modalData && device !== "mobile" && modalType === "full" &&
+			{modalData && device !== "mobile" && modalType === "full" &&
 				<MapTabletFullModal
-					height={modalHeight}
-					type={modalType}
 					data={modalData}
-					onClose={onCloseModal}
+					onSmallClick={onSmallModal}
 				/>
-			} */}
+			}
 		</section>
 	)
 }

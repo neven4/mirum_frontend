@@ -9,18 +9,18 @@ class Slider extends React.Component {
     isOx = null;
     isOy = null;
     lastTouch = 0;
-    imageWidth = this.context.state.width
+    sliderDiv = React.createRef()
     state = {
         imgs: [],
         currentIndex: 0,
         movement: 0,
         transitionDuration: "0s",
-        // imageWidth: null
+        imageWidth: null
     };
 
     componentDidMount() {
         this.setState({
-            // imageWidth: this.context.state.width,
+            imageWidth: this.sliderDiv.current.offsetWidth,
             imgs: this.props.images
         })
     }
@@ -70,8 +70,8 @@ class Slider extends React.Component {
             nextMovement = 0;
         }
 
-        if (nextMovement > maxLength * this.imageWidth) {
-            nextMovement = maxLength * this.imageWidth;
+        if (nextMovement > maxLength * this.state.imageWidth) {
+            nextMovement = maxLength * this.state.imageWidth;
         }
 
         this.setState({
@@ -83,7 +83,7 @@ class Slider extends React.Component {
     handleMovementEnd = () => {
         const { movement, currentIndex } = this.state;
 
-        const endPosition = movement / this.imageWidth;
+        const endPosition = movement / this.state.imageWidth;
         const endPartial = endPosition % 1;
         const endingIndex = endPosition - endPartial;
         const deltaInteger = endingIndex - currentIndex;
@@ -107,23 +107,26 @@ class Slider extends React.Component {
     transitionTo = (index, duration) => {
         this.setState({
         currentIndex: index,
-        movement: index * this.imageWidth,
+        movement: index * this.state.imageWidth,
         transitionDuration: `${duration}s`,
         });
     }
     render() {
         const { currentIndex, movement, transitionDuration, imgs } = this.state;
         const maxLength = imgs.length - 1;
-        const maxMovement = maxLength * this.imageWidth;
+        const maxMovement = maxLength * this.state.imageWidth;
 
         return (
-            <>
-                <div className={ styles.slider}>
+            <div>
+                <div
+                    className={ styles.slider}
+                    ref={this.sliderDiv}
+                >
                     <div
                         className={styles.main}
                         style={{
-                            width: `${this.imageWidth}px`,
-                            height: `${this.imageWidth}px`,
+                            width: `${this.state.imageWidth}px`,
+                            height: `${this.state.imageWidth}px`,
                         }}
                         onTouchStart={this.handleTouchStart}
                         onTouchMove={this.handleTouchMove}
@@ -190,13 +193,13 @@ class Slider extends React.Component {
                     }
                     </div>
                 </div>
-                <p className={ styles.authorText }>
+                <p className={ `${styles.authorText} ${this.props.authorInside ? styles.authorTextInside : ""}`}>
                     {imgs && imgs[currentIndex] && imgs[currentIndex].author
-                        ? `${imgs[currentIndex]["author"]}`
+                        ? `Источник: ${imgs[currentIndex]["author"]}`
                         : ""
                     }
 				</p>
-            </>
+            </div>
         );
     }
 }

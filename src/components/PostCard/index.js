@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
@@ -11,8 +11,8 @@ import Carousel from "../Carousel"
 
 const PostCard = props => {
 	const context = useContext(Context)
-	console.log(props)
-	const id = props.data ? props.data.id : props.match.params.id
+	const id = props.data ? props.data.id : props.id
+	const {isModal} = props
 
 	const postData = props.data
 		? props.data
@@ -29,9 +29,18 @@ const PostCard = props => {
 		metroName
 	} = postData
 
+	useLayoutEffect(() => {
+		if (context.state.device === "mobile") {
+			window.scrollTo(0, 0);
+		}
+	}, [])
+
 	return (
-		<article className={ styles.postCard }>
-			<Carousel images={photos} />
+		<article className={ `${styles.postCard} ${isModal ? styles.modalPostCard : ""} ` }>
+			<Carousel
+				images={photos}
+				authorInside={isModal}
+			/>
 
 			<section className={ styles.postCardInfo }>
 				<div className={ styles.postCardTitle }>
@@ -40,7 +49,7 @@ const PostCard = props => {
 					</h1>
 
 					<ShareBtn
-						page={props.data ? "map" : "post"}
+						page={props.data ? "map" : "cafes"}
 						id={id}
 					/>
 				</div>
