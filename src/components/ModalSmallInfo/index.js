@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 import ShareBtn from '../ShareBtn';
 import Like from '../Like';
 
-const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd }) => {
+const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd, onFullModalClick }) => {
     const context = useContext(Context)
     const { title, smallText, photos, id, likes, instagramLink } = data
     const { device } = context.state
@@ -18,12 +18,16 @@ const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd }) => {
                 onTouchMove={touchMove}
                 onTouchEnd={touchEnd}
             >
-                <div className={styles.smallModal_img}>
+                <div
+                    className={styles.smallModal_img}
+                    onClick={device !== "mobile" ? onFullModalClick : null}
+                >
                     <img
                         alt={`Main Cafe img. author: ${photos[0].author}`}
                         decoding="auto"
                         src={photos[0]["640"]}
                         style={{objectFit: "cover"}}
+                        
                     />
 
                     <p className={styles.smallModal_author}>
@@ -31,9 +35,12 @@ const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd }) => {
                     </p>
                 </div>
                 <div className={styles.smallModal_info}>
-                    <h2>{title}</h2>
+                    <h2 onClick={device !== "mobile" ? onFullModalClick : null}>{title}</h2>
                         
-                    <p className={styles.smallModal_about}> 
+                    <p
+                        className={styles.smallModal_about}
+                        onClick={device !== "mobile" ? onFullModalClick : null}
+                    > 
                         {smallText}
                     </p>
 

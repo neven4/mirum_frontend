@@ -261,7 +261,7 @@ const MapPage = props => {
 			points.map(el => {
 				let placemark = createPlacemark(el.coords, el.text)
 				placemark.events.add('click', e => {
-					localMap.setCenter(el.coords, 18, {})
+					localMap.setCenter(el.coords, 15, {})
 					openSmallModal(el.data)
 					e.stopPropagation()
 				})
@@ -272,6 +272,25 @@ const MapPage = props => {
 
 		localMap.geoObjects.add(clusterer);
 		// localMap.setBounds(clusterer.getBounds(), {});
+
+		const layer = function () {
+			return new window.ymaps.Layer('', {
+				// Если есть необходимость показать собственное изображение в местах неподгрузившихся тайлов,
+				// раскомментируйте эту строчку и укажите ссылку на изображение.
+				// notFoundTile: 'url'
+			});
+			// Указываем доступный диапазон масштабов для данного слоя.
+			// layer.getZoomRange = function () {
+			// 	return ymaps.vow.resolve([0, 4]);
+			// };
+			// // Добавляем свои копирайты.
+			// layer.getCopyrights = function () {
+			// 	return ymaps.vow.resolve('©');
+			// };
+			// return layer;
+		};
+		// Добавляем в хранилище слоев свой конструктор.
+		localMap.layer.storage.add('pep', layer);
 
 		setLocalMapId(localMap)
 		setIsLoading(false)
@@ -334,7 +353,7 @@ const MapPage = props => {
 				<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8.48528" cy="8.73218" r="5" transform="rotate(-45 8.48528 8.73218)" stroke="#727272" strokeWidth="2"/><path d="M12.3743 12.6212L16.2634 16.5103" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
 			</div>
 
-			<div id="map" style={{flexGrow: 1, backgroundColor: "#fff"}} />
+			<div id="map" />
 
 			{modalData &&
 				<MapModal

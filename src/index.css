@@ -22,6 +22,18 @@ code {
     monospace;
 }
 
+/* Делаем карту чёрно-белой */
+#map {
+    flex-grow: 1;
+    background-color: #fff;
+    /* filter: grayscale(100%); 
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrixtype=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");  */
+}
+
+.ymaps-2-1-75-ground-pane canvas {
+  filter: brightness(1.07) saturate(42%) blur(0.3px);
+}
+
 .map-round-btn {
   display: flex;
   justify-content: center;

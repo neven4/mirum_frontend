@@ -118,6 +118,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 							touchStart={handleTouchStart}
 							touchMove={handleTouchMove}
 							touchEnd={handleTouchEnd}
+							onFullModalClick={onFullModal}
 						/>
 
 						{device !== "mobile" &&

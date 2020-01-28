@@ -22,7 +22,7 @@ const Header = () => {
 				<Footer inHeader={true} />
 			}
 
-			<a href="https://www.instagram.com"
+			<a href="https://www.instagram.com/chill_coffeerooms/"
 				className={ styles.instagram }
 				target="_blank"
 				rel="noopener noreferrer"
