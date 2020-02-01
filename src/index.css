@@ -27,8 +27,8 @@ code {
   background-color: #fff;
 }
 
-#map [class*="ymaps-2"][class*="-ground-pane"] {
-  filter: brightness(1.07) saturate(42%) blur(0.3px) ;
+.zoom-btn-container {
+  right: 10px !important;
 }
 
 .map-round-btn {
@@ -40,6 +40,7 @@ code {
   border-radius: 50%;
   background-color: #fff;
   box-shadow: 1px 2px 8px rgba(40, 40, 40, 0.25);
+  cursor: pointer;
 }
 
 .map-round-btn:active {
@@ -47,51 +48,27 @@ code {
 }
 
 .map-round-btn-sm {
-  width: 35px;
-  height: 35px;
+  width: 36px;
+  height: 36px;
 }
 
-#suggested {
-  height: 100%;
-  width: 100%;
-  outline: none;
-  font-size: 14px;
-  padding: 0 30px;
-  border: none;
-  line-height: 20px;
-  background-color: #EDEDED;
-  border-radius: 6px;
+#cur-geo {
+  right: 10px !important;
+  bottom: 20px !important;
 }
 
-.map-input-container {
-  position: absolute;
-  height: 50px;
-  width: 100%;
-  padding: 10px;
-  background-color: #fff;
-  opacity: 0;
-  top: -50px;
-  transition: top, opacity 0.3s ease;
-  z-index: 5000;
-  display: flex;
+.cluster > img {
+  width: 21px;
 }
 
-.search-input-body {
-  position: relative;
-  flex-grow: 1;
-  height: 30px;
-}
-
-.search-input-cancel {
-  line-height: 30px;
-  padding-left: 10px;
-  color: #467AFF;
+.cluster > div {
+  top: -3px !important;
 }
 
 .map-search-btn {
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 20px !important;
+  right: 10px !important;
   transition: visibility 0.3s ease;
   z-index: 5000;
 }
@@ -99,36 +76,6 @@ code {
 .hide-search-btn {
   visibility: hidden;
   display: none;
-}
-
-.show-input {
-  top: 0;
-  opacity: 1;
-}
-
-.clear-input-btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 30px;
-  width: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.search-input-icon {
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.search-input-icon i,
-.clear-input-btn i {
-  color: #BABABA;
 }
 
 #zoom-out {

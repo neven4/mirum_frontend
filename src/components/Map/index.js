@@ -1,20 +1,184 @@
 import React, {useContext, useEffect, useState, useLayoutEffect} from 'react';
 import Context from '../../Context/Context';
+import markerClusterer from "@google/markerclustererplus"
 
 import styles from './styles.module.scss';
 
-import placemark from '../../images/placemark.png'
-import geoPosImg from '../../images/geoPos.png'
+import place from '../../images/place.svg'
+import geo from "../../images/geo.svg"
 import MapModal from '../MapModal';
 import MapTabletFullModal from '../MapTabletFullModal';
 import Spiner from "../Spiner"
+import MapSearch from "../MapSearch"
+
+const mapStyle = [
+	{
+		"featureType": "all",
+		"elementType": "geometry",
+		"stylers": [
+			{
+				"visibility": "on"
+			}
+		]
+	},
+	{
+		"featureType": "poi",
+		"elementType": "all",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "all",
+		"elementType": "geometry.fill",
+		"stylers": [
+			{
+				"color": "#ccc"
+			},
+			{
+				"visibility": "on"
+			}
+		]
+	},
+	{
+		"featureType": "all",
+		"elementType": "labels",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "administrative",
+		"elementType": "labels.text.fill",
+		"stylers": [
+			{
+				"color": "#444444"
+			}
+		]
+	},
+	{
+		"featureType": "landscape",
+		"elementType": "all",
+		"stylers": [
+			{
+				"color": "#ccc"
+			}
+		]
+	},
+	
+	{
+		"featureType": "road",
+		"elementType": "all",
+		"stylers": [
+			{
+				"saturation": -100
+			},
+			{
+				"lightness": 45
+			}
+		]
+	},
+	{
+		"featureType": "road",
+		"elementType": "geometry",
+		"stylers": [
+			{
+				"color": "#f5ece1"
+			}
+		]
+	},
+	{
+		"featureType": "road",
+		"elementType": "labels",
+		"stylers": [
+			{
+				"visibility": "simplified"
+			}
+		]
+	},
+	{
+		"featureType": "road.highway",
+		"elementType": "all",
+		"stylers": [
+			{
+				"visibility": "simplified"
+			}
+		]
+	},
+	{
+		"featureType": "road.arterial",
+		"elementType": "labels.icon",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "transit",
+		"elementType": "all",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "transit.station",
+		"elementType": "all",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "transit.station.airport",
+		"elementType": "all",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "transit.station.bus",
+		"elementType": "labels",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "transit.station.rail",
+		"elementType": "all",
+		"stylers": [
+			{
+				"visibility": "off"
+			}
+		]
+	},
+	{
+		"featureType": "water",
+		"elementType": "all",
+		"stylers": [
+			{
+				"color": "#fff"
+			}
+		]
+	}
+]
 
 const MapPage = props => {
 	const context = useContext(Context)
 	const cafes = context.state.cafes.read()
 	const urlId = props.match.params.id
 	const {device} = context.state
-	let localMap = null
 	let mapHeight
 
 	const [isLoading, setIsLoading] = useState(true)
@@ -23,19 +187,15 @@ const MapPage = props => {
 	const [modalData, setModalData] = useState(null)
 	const [localMapId, setLocalMapId] = useState(null)
 	const [isSearchShow, setSearchShow] = useState(false)
-	const [searchValue, setSearchValue] = useState("")
 
 	useLayoutEffect(() => {
-		if (!window.ymaps) {
+		if (!window.google.maps) {
 			const script = document.createElement('script');
-			const onloadScript = document.createElement('script');
 	
-			onloadScript.type = 'text/javascript';
-		
-			script.src = "https://api-maps.yandex.ru/2.1/?apikey=36c0289b-59c0-493e-9d11-69d0114f742e&load=package.geoObjects&lang=ru-RU";
+			script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDgkawtYk61G3q4zBrUuxzkcDOY_bd1XFU";
 			script.async = true;
-			script.type = 'text/javascript';
-			script.onload = createYmaps;
+			script.defer = true;
+			script.onload = initMap;
 		
 			document.body.appendChild(script);
 		
@@ -43,240 +203,193 @@ const MapPage = props => {
 			  document.body.removeChild(script);
 			}
 		} else {
-			createYmaps()
+			initMap()
 		}
 	}, []);
 
-	const createYmaps = () => {
-		window.ymaps.ready(() => {
-			window.ymaps.geolocation.get().then((res) => {
-				const mapContainer = window.document.getElementById('map')
-				const bounds = res.geoObjects.get(0).properties.get('boundedBy')
-				const mapState = window.ymaps.util.bounds.getCenterAndZoom(
-					bounds,
-					[mapContainer.offsetWidth, mapContainer.offsetHeight - 50]
-				)
-				mapState.zoom = 14
-				mapHeight = mapContainer.offsetHeight - 50
-				setModalHeight(mapHeight * 0.87)
-				const map = createMap(mapState)
-				setLocalMapId(map)
-			}, function() {
-				const map = createMap({
-					center: [55.751574, 37.573856],
-					zoom: 9
-				})
-				setLocalMapId(map)
-			})	
+	const initMap = () => {
+		if (window.navigator.geolocation) {
+			window.navigator.geolocation.getCurrentPosition(function(position) {
+				const state = {
+					center: {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					},
+					zoom: 14
+				}
+
+				createMap(state)
+			},function() {
+				const state = {
+					center: {lat: 59.9343, lng: 30.3351},
+					zoom: 14
+				}
+	
+				createMap(state)
+			})
+		} else {
+			const state = {
+				center: {lat: 59.9343, lng: 30.3351},
+				zoom: 14
+			}
+
+			createMap(state)
+		}
+	}
+
+	const createMap = state => {
+		const mapContainer = window.document.getElementById('map')
+		mapHeight = mapContainer.offsetHeight - 50
+		setModalHeight(mapHeight * 0.87)
+
+		const map = new window.google.maps.Map(document.getElementById('map'), {
+			...state,
+			disableDefaultUI: true,
+			gestureHandling: "greedy",
+			styles: mapStyle
 		})
+
+		setLocalMapId(map)
+		setIsLoading(false)
+
+		initZoomControl(map)
+		initGeolocationControl(map)
+		initPlaces(map)
+		initSearchControl(map)
+	}
+
+	const initZoomControl = (map) => {
+        document.getElementById('zoom-in').onclick = function() {
+          	map.setZoom(map.getZoom() + 1);
+		}
+
+        document.getElementById('zoom-out').onclick = function() {
+          	map.setZoom(map.getZoom() - 1);
+		}
+
+        map.controls[window.google.maps.ControlPosition.RIGHT_CENTER].push(
+			document.querySelector('.zoom-btn-container')
+		)
+	}
+
+	const initSearchControl = (map) => {
+        map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(
+			document.querySelector('.map-search-btn')
+		)
+	}
+
+	const initGeolocationControl = map => {
+		const geoBtn = document.getElementById('cur-geo')
+		geoBtn.onclick = () => {
+			geolocate(map)
+		}
+		  
+		map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geoBtn)
+	}
+
+	const geolocate = map => {
+		if (window.navigator.geolocation) {
+			window.navigator.geolocation.getCurrentPosition(function (position) {
+				const pos = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+				const icon = {
+					url: geo,
+					scaledSize: new window.google.maps.Size(24, 24),
+					origin: new window.google.maps.Point(0, 0),
+					anchor: new window.google.maps.Point(0, 0)
+				}
+
+				new window.google.maps.Marker({
+					position: pos,
+					draggable: false,
+					clickable: false,
+					icon,
+					map
+				});
+				
+				map.setCenter(pos);
+			});
+		}
+	}
+
+	const initPlaces = (map) => {
+		const markerPlaces = cafes.map(cafe => {
+			const pos = new window.google.maps.LatLng(cafe.addressCoord[0], cafe.addressCoord[1]);
+			const textLength = cafe.title.length
+			const labelWidth = (textLength) * 8
+			const markerWidth = (textLength) * 12
+
+			const icon = {
+				url: place,
+				scaledSize: new window.google.maps.Size(labelWidth + 30, 20),
+				origin: new window.google.maps.Point(labelWidth / 2 + 7, 0),
+				anchor: new window.google.maps.Point(0, 0),
+				labelOrigin: new window.google.maps.Point(21 + labelWidth / 2, 10)
+			}
+
+			var shape = {
+				coords: [0, 0, markerWidth + 30, 20],
+				type: "rect"
+			}
+
+			const placeMarker = new window.google.maps.Marker({
+				position: pos,
+				draggable: false,
+				icon,
+				shape,
+				label: {
+					text: cafe.title,
+					color: '#2A2A2A',
+					fontSize: '14px',
+					fontFamily: 'Roboto'
+				}
+			})
+
+			placeMarker.addListener('click', function() {
+				map.setZoom(16)
+				map.setCenter(placeMarker.getPosition())
+				openSmallModal(cafe)
+			})
+
+			return placeMarker
+		})
+
+		new markerClusterer(map, markerPlaces,
+			{
+				gridSize: 40,
+				zoomOnClick: true,
+				minimumClusterSize: 2,
+				styles: [{
+					url: place,
+					scaledSize: new window.google.maps.Size(21, 30),
+					height: 30,
+					width: 21,
+					iconAncor: [0, 0],
+					textColor: "#fff"
+				}],
+			}
+		);
 	}
 
 	useEffect(() => {
 		if (urlId && localMapId) {
 			const dataFromId = cafes.find(el => el.id === urlId)
-			localMapId.setCenter(dataFromId.addressCoord, 14)
+			localMapId.setZoom(16)
+			localMapId.setCenter({
+				lat: dataFromId.addressCoord[0],
+				lng: dataFromId.addressCoord[1]
+			})
 			openSmallModal(dataFromId)
 		}
 	}, [localMapId])
 
-	const createMap = (state) => {
-		localMap = new window.ymaps.Map('map', {...state, controls: []}, {
-			searchControlProvider: 'yandex#search',
-			suppressMapOpenBlock: true,
-			suppressObsoleteBrowserNotifier: true,
-			hotspotLayerInteractivityModel: 'default#silent'
+	const onSuggestInputClick = cafe => {
+		localMapId.setZoom(16)
+		localMapId.setCenter({
+			lat: cafe.addressCoord[0],
+			lng: cafe.addressCoord[1]
 		})
-
-		const ZoomLayout = window.ymaps.templateLayoutFactory.createClass(
-			"<div class='zoom-btn-container'>" +
-			"<div id='zoom-in' class='map-round-btn'><svg width='21' height='21' viewBox='0 0 21 21' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M10.5 1V20' stroke='#727272' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M20 10.5L1 10.5' stroke='#727272' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div>" +
-			"<div id='zoom-out' class='map-round-btn'><svg width='21' height='19' viewBox='0 0 21 19' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M20 10.5L1 10.5' stroke='#727272' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div>" +
-			"</div>", 
-			{
-				build: function () {
-					ZoomLayout.superclass.build.call(this);
-					this.zoomInCallback = window.ymaps.util.bind(this.zoomIn, this);
-					this.zoomOutCallback = window.ymaps.util.bind(this.zoomOut, this);
-
-					window.document.getElementById('zoom-in').addEventListener('click', this.zoomInCallback);
-					window.document.getElementById('zoom-out').addEventListener('click', this.zoomOutCallback);
-				},
-				clear: function () {
-					window.document.getElementById('zoom-in').removeEventListener('click', this.zoomInCallback);
-					window.document.getElementById('zoom-out').removeEventListener('click', this.zoomOutCallback);
-					ZoomLayout.superclass.clear.call(this);
-				},
-				zoomIn: function () {
-					const map = this.getData().control.getMap();
-					map.setZoom(map.getZoom() + 1, {checkZoomRange: true});
-				},
-				zoomOut: function () {
-					const map = this.getData().control.getMap();
-					map.setZoom(map.getZoom() - 1, {checkZoomRange: true});
-				}
-			}
-		)
-
-		const zoomControl = new window.ymaps.control.ZoomControl({
-			options: {layout: ZoomLayout}
-		})
-
-		localMap.controls.add(zoomControl, {
-			position: {
-				top: mapHeight / 2 - 60,
-				right: 10
-			}
-		})
-
-		const GeoLayout = window.ymaps.templateLayoutFactory.createClass(
-			"<div id='cur-geo' class='map-round-btn map-round-btn-sm'><svg width='21' height='21' viewBox='0 0 21 21' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M10.5 7C8.56625 7 7 8.56625 7 10.5C7 12.4337 8.56625 14 10.5 14C12.4338 14 14 12.4337 14 10.5C14 8.56625 12.4338 7 10.5 7ZM18.3225 9.625C17.92 5.97625 15.0238 3.08 11.375 2.6775V0.875H9.625V2.6775C5.97625 3.08 3.08 5.97625 2.6775 9.625H0.875V11.375H2.6775C3.08 15.0237 5.97625 17.92 9.625 18.3225V20.125H11.375V18.3225C15.0238 17.92 17.92 15.0237 18.3225 11.375H20.125V9.625H18.3225ZM10.5 16.625C7.11375 16.625 4.375 13.8862 4.375 10.5C4.375 7.11375 7.11375 4.375 10.5 4.375C13.8863 4.375 16.625 7.11375 16.625 10.5C16.625 13.8862 13.8863 16.625 10.5 16.625Z' fill='#727272'/></svg></div>",
-			{
-				build: function () {
-					GeoLayout.superclass.build.call(this);
-					this.currentGeo = window.ymaps.util.bind(this.curGeoClick, this);
-					window.document.getElementById('cur-geo').addEventListener('click', this.currentGeo);
-				},
-
-				clear: function () {
-					window.document.getElementById('cur-geo').removeEventListener('click', this.currentGeo);
-					GeoLayout.superclass.clear.call(this);
-				},
-
-				curGeoClick: function () {
-					window.ymaps.geolocation.get()
-						.then(el => {
-							localMap.setCenter(el.geoObjects.position, 16)
-							const mark = new window.ymaps.Placemark(el.geoObjects.position, {}, {
-								draggable: false,
-								iconLayout: 'default#image',
-								iconImageHref: geoPosImg,
-								iconImageSize: [24, 24],
-								iconImageOffset: [-12, -12]
-							});
-
-							localMap.geoObjects.add(mark)
-						})
-				}
-			}
-		)
-
-		const GeolocationControl = new window.ymaps.control.GeolocationControl({
-			options: {
-				layout: GeoLayout,
-				noPlacemark: true
-			}
-		})
-
-		localMap.controls.add(GeolocationControl, {
-			position: {
-				bottom: 20,
-				right: 10
-			}
-		})
-		const createPlacemark = (coords, text)=> {
-			return new window.ymaps.Placemark(coords, {
-				iconContent: text
-			}, {
-				draggable: false,
-				iconLayout: 'default#imageWithContent',
-				iconImageHref: placemark,
-				iconImageSize: [22, 30],
-				iconImageOffset: [-11, -30],
-				iconContentOffset: [30, 5],
-				iconContentLayout: window.ymaps.templateLayoutFactory.createClass(
-					'<div style="color: #2A2A2A; font-size: 18px; white-space: nowrap;">{{ properties.iconContent }}</div>'
-				)
-			});
-		}
-
-		const setCenter = coords => {
-			return localMap.setCenter(coords, 18)
-		}
-
-		const points = cafes.map(el => {
-			return {
-				coords: el.addressCoord,
-				text: el.title,
-				address: el.addressName,
-				data: el
-			}
-		})
-
-		const findPlaces = (arr, findName) => {
-			return arr.filter(value => {
-				const searchingName = findName.toLowerCase()
-				if (
-					value.text.toLowerCase().indexOf(searchingName) !== -1 ||
-					value.address.toLowerCase().indexOf(searchingName) !== -1
-				) {
-					return true
-				} else {
-					return false
-				}
-			});
-		}
-
-		const SeggestProvider = {
-			suggest: (request, options) => {
-				const res = findPlaces(points, request)
-				const results = Math.min(options.results, res.length)
-				let arrayResult = []
-				for (var i = 0; i < results; i++) {
-					arrayResult.push({
-						displayName: `<span style="font-size: 12px; color: #2A2A2A;">${res[i].text},</span> <small style="font-size: 12px; color: #BABABA;">${res[i].address}</small>`,
-						value: res[i].text,
-						coords: res[i].coords
-					})
-				}
-
-				return window.ymaps.vow.resolve(arrayResult);
-			}
-		}
-
-		const suggestView1 = new window.ymaps.SuggestView('suggested', {
-			provider: SeggestProvider,
-			results: 5
-		})
-
-		suggestView1.events.add('select', e => {
-			const coords = e.get('item').coords
-
-			setCenter(coords)
-		})
-
-		const clusterer = new window.ymaps.Clusterer({
-			clusterIcons: [
-				{
-					href: placemark,
-					size: [26, 39],
-					offset: [-13, -39]
-				}
-			],
-			zoomMargin: 50,
-			clusterNumbers: [3],
-			clusterIconContentLayout: window.ymaps.templateLayoutFactory.createClass(
-				'<div style="color: #FFFFFF; font-weight: bold;">{{ properties.geoObjects.length }}<div>'
-			)
-		})
-
-		clusterer.add(
-			points.map(el => {
-				let placemark = createPlacemark(el.coords, el.text)
-				placemark.events.add('click', e => {
-					localMap.setCenter(el.coords, 15, {})
-					openSmallModal(el.data)
-					e.stopPropagation()
-				})
-
-				return placemark;
-			})
-		)
-
-		localMap.geoObjects.add(clusterer);
-		// localMap.setBounds(clusterer.getBounds(), {});
-
-		setIsLoading(false)
-		return localMap
+		openSmallModal(cafe)
 	}
 
 	const openSmallModal = el => {
@@ -304,39 +417,55 @@ const MapPage = props => {
 				</div>
 			}
 
-			<div className={`map-input-container ${isSearchShow ? "show-input" : ""}`}>
-				<div className="search-input-body">
-					<div className="search-input-icon">
-						<i className="fas fa-search" />
-					</div>
-		
-					<input type="text" id="suggested" value={searchValue}
-						onChange={e => setSearchValue(e.target.value)}
-						placeholder="Search"
-					/>
-		
-					<div className="clear-input-btn"
-						onClick={() => setSearchValue("")}
-						style={{display: searchValue === "" ? "none" : "flex"}}
-					>
-						<i className="fas fa-times-circle" />
-					</div>
-				</div>
-				
-				<div className="search-input-cancel"
-					onClick={() => setSearchShow(false)}
-				>
-					Cancel
-				</div>
-			</div>
-
-			<div className={`map-round-btn map-search-btn ${isSearchShow ? "hide-search-btn" : ""}`}
-				onClick={() => setSearchShow(true)}
-			>
-				<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8.48528" cy="8.73218" r="5" transform="rotate(-45 8.48528 8.73218)" stroke="#727272" strokeWidth="2"/><path d="M12.3743 12.6212L16.2634 16.5103" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-			</div>
+			{isSearchShow &&
+				<MapSearch
+					setSearchShow={setSearchShow}
+					cafes={cafes}
+					onItemClick={onSuggestInputClick}
+				/>
+			}
 
 			<div id="map" />
+
+			<div style={{ display: "none" }}>
+				<div className={`map-round-btn map-search-btn ${isSearchShow ? "hide-search-btn" : ""}`}
+					onClick={() => setSearchShow(true)}
+				>
+					<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8.48528" cy="8.73218" r="5" transform="rotate(-45 8.48528 8.73218)" stroke="#727272" strokeWidth="2"/><path d="M12.3743 12.6212L16.2634 16.5103" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+				</div>
+
+				<div className="zoom-btn-container">
+					<div
+						id="zoom-in"
+						className="map-round-btn"
+						title="Zoom In"
+					>
+						<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M11 1.04761V20.9524" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+							<path d="M20.9524 11H1.04761" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+						</svg>
+
+					</div>
+					<div 
+						id="zoom-out"
+						className="map-round-btn"
+						title="Zoom Out"
+					>
+						<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M20.9524 12.1579H1.04761" stroke="#727272" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+						</svg>
+					</div>
+				</div>
+
+				<div
+					id="cur-geo"
+					className="map-round-btn map-round-btn-sm"
+				>
+					<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M11.0001 7.33335C8.97425 7.33335 7.33341 8.97419 7.33341 11C7.33341 13.0258 8.97425 14.6667 11.0001 14.6667C13.026 14.6667 14.6667 13.0258 14.6667 11C14.6667 8.97419 13.026 7.33335 11.0001 7.33335ZM19.1951 10.0834C18.7734 6.26085 15.7393 3.22669 11.9167 2.80502V0.916687H10.0834V2.80502C6.26091 3.22669 3.22675 6.26085 2.80508 10.0834H0.916748V11.9167H2.80508C3.22675 15.7391 6.26091 18.7734 10.0834 19.195V21.0834H11.9167V19.195C15.7393 18.7734 18.7734 15.7391 19.1951 11.9167H21.0834V10.0834H19.1951ZM11.0001 17.4167C7.45258 17.4167 4.58341 14.5475 4.58341 11C4.58341 7.45252 7.45258 4.58335 11.0001 4.58335C14.5476 4.58335 17.4167 7.45252 17.4167 11C17.4167 14.5475 14.5476 17.4167 11.0001 17.4167Z" fill="#727272"/>
+					</svg>
+				</div>
+			</div>
 
 			{modalData &&
 				<MapModal

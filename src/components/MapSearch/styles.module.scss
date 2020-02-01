@@ -1,0 +1,102 @@
+@import '../../styles/global.scss';
+
+.suggestInputContainer {
+    position: absolute;
+    background-color: #fff;
+    opacity: 0;
+    top: -50px;
+    transition: top, opacity 0.3s ease;
+    z-index: 5000;
+    width: 100%;
+}
+
+.mapInputContainer {
+    height: 50px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+}
+
+.showInput {
+    top: 0;
+    opacity: 1;
+}
+
+.searchInputBody {
+    position: relative;
+    flex-grow: 1;
+    height: 30px;
+
+    input {
+        height: 100%;
+        width: 100%;
+        outline: none;
+        font-size: 14px;
+        padding: 0 30px;
+        border: none;
+        line-height: 20px;
+        background-color: #EDEDED;
+        border-radius: 6px;
+    }
+}
+
+.searchInputIcon {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.searchInputIcon svg,
+.clearInputBtn svg {
+    color: $grey;
+}
+
+.clearInputBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchInputCancel {
+    line-height: 30px;
+    padding-left: 10px;
+    color: $blue;
+    cursor: pointer;
+}
+
+.suggestedList {
+    width: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 50px;
+    background-color: #fff;
+}
+
+.suggestedValue {
+    height: 25px;
+    padding: 0 10px;
+    // padding-left: 40px;
+
+    span {
+        font-size: 12px;
+        line-height: 25px;
+
+        &:not(:first-child) {
+            color: $grey;
+        }
+    }
+}
+
+@media (min-width: 651px) {
+    .suggestedValue span {
+        font-size: 14px;
+    }
+}
