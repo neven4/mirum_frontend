@@ -59,12 +59,14 @@ const MapPage = props => {
 				mapState.zoom = 14
 				mapHeight = mapContainer.offsetHeight - 50
 				setModalHeight(mapHeight * 0.87)
-				createMap(mapState)
+				const map = createMap(mapState)
+				setLocalMapId(map)
 			}, function() {
-				createMap({
+				const map = createMap({
 					center: [55.751574, 37.573856],
 					zoom: 9
 				})
+				setLocalMapId(map)
 			})	
 		})
 	}
@@ -273,27 +275,8 @@ const MapPage = props => {
 		localMap.geoObjects.add(clusterer);
 		// localMap.setBounds(clusterer.getBounds(), {});
 
-		const layer = function () {
-			return new window.ymaps.Layer('', {
-				// Если есть необходимость показать собственное изображение в местах неподгрузившихся тайлов,
-				// раскомментируйте эту строчку и укажите ссылку на изображение.
-				// notFoundTile: 'url'
-			});
-			// Указываем доступный диапазон масштабов для данного слоя.
-			// layer.getZoomRange = function () {
-			// 	return ymaps.vow.resolve([0, 4]);
-			// };
-			// // Добавляем свои копирайты.
-			// layer.getCopyrights = function () {
-			// 	return ymaps.vow.resolve('©');
-			// };
-			// return layer;
-		};
-		// Добавляем в хранилище слоев свой конструктор.
-		localMap.layer.storage.add('pep', layer);
-
-		setLocalMapId(localMap)
 		setIsLoading(false)
+		return localMap
 	}
 
 	const openSmallModal = el => {
