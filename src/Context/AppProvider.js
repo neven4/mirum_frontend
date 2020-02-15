@@ -14,7 +14,8 @@ class AppProvider extends Component {
         shareModalOpen: false,
         shareModalPage: null,
         shareModalId: null,
-        device: null
+        device: null,
+        map: null
     };
 
     componentDidMount() {

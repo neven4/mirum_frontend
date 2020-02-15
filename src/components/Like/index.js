@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState, useLayoutEffect} from 'react';
 import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
@@ -8,7 +8,7 @@ const Like = ({ numOfLikes, className, id }) => {
 	const [likesNum, setLikesNum] = useState(0)
 	const isLiked = context.state.likedCafes.includes(id)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setLikesNum(Number(numOfLikes))
 	}, [])
 

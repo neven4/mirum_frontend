@@ -1,17 +1,27 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef, useLayoutEffect} from 'react';
 import Context from '../../Context/Context';
 
 import styles from './styles.module.scss';
 import ShareBtn from '../ShareBtn';
 import Like from '../Like';
 
-const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd, onFullModalClick }) => {
+const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd, onFullModalClick, getInfoHeight }) => {
+    const smallModalRef = useRef(null);
     const context = useContext(Context)
     const { title, smallText, photos, id, likes, instagramLink } = data
     const { device } = context.state
 
+    useLayoutEffect(() => {
+        const height = device === "mobile" ? +smallModalRef.current.offsetHeight + 35 : 216
+
+        getInfoHeight(height)
+    }, [])
+
     return (
-        <div className={styles.smallModal}>
+        <div
+            className={styles.smallModal}
+            ref={smallModalRef}
+        >
             <div
                 className={styles.smallModal_body}
                 onTouchStart={touchStart}

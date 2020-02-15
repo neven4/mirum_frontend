@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState, useLayoutEffect} from 'react';
 import Context from '../../Context/Context';
-import markerClusterer from "@google/markerclustererplus"
+import MarkerClusterer from "@google/markerclustererplus"
 
 import styles from './styles.module.scss';
 
@@ -10,176 +10,13 @@ import MapModal from '../MapModal';
 import MapTabletFullModal from '../MapTabletFullModal';
 import Spiner from "../Spiner"
 import MapSearch from "../MapSearch"
-
-const mapStyle = [
-	{
-		"featureType": "all",
-		"elementType": "geometry",
-		"stylers": [
-			{
-				"visibility": "on"
-			}
-		]
-	},
-	{
-		"featureType": "poi",
-		"elementType": "all",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "all",
-		"elementType": "geometry.fill",
-		"stylers": [
-			{
-				"color": "#ccc"
-			},
-			{
-				"visibility": "on"
-			}
-		]
-	},
-	{
-		"featureType": "all",
-		"elementType": "labels",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "administrative",
-		"elementType": "labels.text.fill",
-		"stylers": [
-			{
-				"color": "#444444"
-			}
-		]
-	},
-	{
-		"featureType": "landscape",
-		"elementType": "all",
-		"stylers": [
-			{
-				"color": "#ccc"
-			}
-		]
-	},
-	
-	{
-		"featureType": "road",
-		"elementType": "all",
-		"stylers": [
-			{
-				"saturation": -100
-			},
-			{
-				"lightness": 45
-			}
-		]
-	},
-	{
-		"featureType": "road",
-		"elementType": "geometry",
-		"stylers": [
-			{
-				"color": "#f5ece1"
-			}
-		]
-	},
-	{
-		"featureType": "road",
-		"elementType": "labels",
-		"stylers": [
-			{
-				"visibility": "simplified"
-			}
-		]
-	},
-	{
-		"featureType": "road.highway",
-		"elementType": "all",
-		"stylers": [
-			{
-				"visibility": "simplified"
-			}
-		]
-	},
-	{
-		"featureType": "road.arterial",
-		"elementType": "labels.icon",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "transit",
-		"elementType": "all",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "transit.station",
-		"elementType": "all",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "transit.station.airport",
-		"elementType": "all",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "transit.station.bus",
-		"elementType": "labels",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "transit.station.rail",
-		"elementType": "all",
-		"stylers": [
-			{
-				"visibility": "off"
-			}
-		]
-	},
-	{
-		"featureType": "water",
-		"elementType": "all",
-		"stylers": [
-			{
-				"color": "#fff"
-			}
-		]
-	}
-]
+import {standartMap, bigMap} from "./mapStyle"
 
 const MapPage = props => {
 	const context = useContext(Context)
 	const cafes = context.state.cafes.read()
 	const urlId = props.match.params.id
 	const {device} = context.state
-	let mapHeight
 
 	const [isLoading, setIsLoading] = useState(true)
 	const [modalType, setModalType] = useState("")
@@ -189,21 +26,17 @@ const MapPage = props => {
 	const [isSearchShow, setSearchShow] = useState(false)
 
 	useLayoutEffect(() => {
-		if (!window.google.maps) {
+		if (window.google && window.google.maps) {
+			initMap()
+		} else {
 			const script = document.createElement('script');
 	
-			script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDgkawtYk61G3q4zBrUuxzkcDOY_bd1XFU";
 			script.async = true;
-			script.defer = true;
+			script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDgkawtYk61G3q4zBrUuxzkcDOY_bd1XFU";
+			
 			script.onload = initMap;
 		
 			document.body.appendChild(script);
-		
-			return () => {
-			  document.body.removeChild(script);
-			}
-		} else {
-			initMap()
 		}
 	}, []);
 
@@ -219,7 +52,7 @@ const MapPage = props => {
 				}
 
 				createMap(state)
-			},function() {
+			}, function() {
 				const state = {
 					center: {lat: 59.9343, lng: 30.3351},
 					zoom: 14
@@ -239,15 +72,25 @@ const MapPage = props => {
 
 	const createMap = state => {
 		const mapContainer = window.document.getElementById('map')
-		mapHeight = mapContainer.offsetHeight - 50
-		setModalHeight(mapHeight * 0.87)
+		setModalHeight(mapContainer.offsetHeight - 10)
 
-		const map = new window.google.maps.Map(document.getElementById('map'), {
+		const map = new window.google.maps.Map(mapContainer, {
 			...state,
 			disableDefaultUI: true,
 			gestureHandling: "greedy",
-			styles: mapStyle
+			styles: standartMap,
+			clickableIcons: false
 		})
+
+		map.addListener('zoom_changed', function() {
+			const zoom = map.getZoom()
+
+			if (zoom <= 13) {
+				map.setOptions({styles: bigMap})
+			} else {
+				map.setOptions({styles: standartMap})
+			}
+		});
 
 		setLocalMapId(map)
 		setIsLoading(false)
@@ -312,8 +155,10 @@ const MapPage = props => {
 		}
 	}
 
-	const initPlaces = (map) => {
-		const markerPlaces = cafes.map(cafe => {
+	const initPlaces = async (map) => {
+		const MarkerWithLabel = await import("@google/markerwithlabel").then(foo => foo.default)
+
+		const markerPlaces = await cafes.map(cafe => {
 			const pos = new window.google.maps.LatLng(cafe.addressCoord[0], cafe.addressCoord[1]);
 			const textLength = cafe.title.length
 			const labelWidth = (textLength) * 8
@@ -323,8 +168,7 @@ const MapPage = props => {
 				url: place,
 				scaledSize: new window.google.maps.Size(labelWidth + 30, 20),
 				origin: new window.google.maps.Point(labelWidth / 2 + 7, 0),
-				anchor: new window.google.maps.Point(0, 0),
-				labelOrigin: new window.google.maps.Point(21 + labelWidth / 2, 10)
+				anchor: new window.google.maps.Point(0, 0)
 			}
 
 			var shape = {
@@ -332,17 +176,15 @@ const MapPage = props => {
 				type: "rect"
 			}
 
-			const placeMarker = new window.google.maps.Marker({
+			const placeMarker = new MarkerWithLabel({
 				position: pos,
 				draggable: false,
 				icon,
 				shape,
-				label: {
-					text: cafe.title,
-					color: '#2A2A2A',
-					fontSize: '14px',
-					fontFamily: 'Roboto'
-				}
+				labelContent: cafe.title,
+				labelAnchor: new window.google.maps.Point(0, 0),
+				labelClass: "placeMarkLabel",
+				labelInBackground: true
 			})
 
 			placeMarker.addListener('click', function() {
@@ -354,9 +196,9 @@ const MapPage = props => {
 			return placeMarker
 		})
 
-		new markerClusterer(map, markerPlaces,
+		new MarkerClusterer(map, markerPlaces,
 			{
-				gridSize: 40,
+				gridSize: 50,
 				zoomOnClick: true,
 				minimumClusterSize: 2,
 				styles: [{

@@ -11,6 +11,8 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 
 	const [modalType, setModalType] = useState("")
 	const [getMoveStarted, setMoveStarted] = useState(false)
+	const [smallModalHeight, setSmallModalHeight] = useState(null)
+
 	let startY = null
 	const {device} = context.state
 
@@ -60,7 +62,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 				bottom: `-${height}px`,
 				height: `${height}px`,
 				transform: modalType === "small"
-					? `translateY(-216px)`
+					? `translateY(-${smallModalHeight}px)`
 					: modalType === "full"
 						? `translateY(-${height}px)`
 						: `translateY(0)`
@@ -119,6 +121,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 							touchMove={handleTouchMove}
 							touchEnd={handleTouchEnd}
 							onFullModalClick={onFullModal}
+							getInfoHeight={setSmallModalHeight}
 						/>
 
 						{device !== "mobile" &&

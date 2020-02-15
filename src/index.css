@@ -81,3 +81,11 @@ code {
 #zoom-out {
   margin-top: 10px;
 }
+
+.placeMarkLabel {
+  line-height: 20px;
+  color: #2A2A2A;
+  font-size: 14px;
+  font-family: Roboto;
+  padding-left: 20px;
+}
