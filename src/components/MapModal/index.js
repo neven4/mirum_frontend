@@ -57,7 +57,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 	}
 
 	return (
-		<div className={styles.mapModalWindow}
+		<div className={`${styles.mapModalWindow} ${modalType === "full" ? styles.mapModalWindowFull : ""}`}
 			style={{
 				bottom: `-${height}px`,
 				height: `${height}px`,
@@ -96,7 +96,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 				}
 			</div>
 
-			<div className={styles.mapModalHeader_close}
+			<div className={`${styles.mapModalHeader_close} ${modalType === "full" ? styles.mapModalHeader_closeFull : ""}`}
 				onClick={ onCloseModal }
 			>
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

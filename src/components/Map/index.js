@@ -72,7 +72,7 @@ const MapPage = props => {
 
 	const createMap = state => {
 		const mapContainer = window.document.getElementById('map')
-		setModalHeight(mapContainer.offsetHeight - 10)
+		setModalHeight(mapContainer.offsetHeight)
 
 		const map = new window.google.maps.Map(mapContainer, {
 			...state,
