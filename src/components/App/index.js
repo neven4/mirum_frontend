@@ -9,10 +9,8 @@ import Footer from '../Footer';
 import Header from '../Header';
 import ShareModal from '../ShareModal';
 import Spiner from '../Spiner';
-
-const MapPage = React.lazy(() => import('../Map'))
-const Main = React.lazy(() => import('../Main'))
-
+import MapPage from "../Map"
+import Main from "../Main"
 
 const App = () => {
 	const context = useContext(Context)

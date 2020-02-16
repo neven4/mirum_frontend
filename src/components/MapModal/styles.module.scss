@@ -16,7 +16,12 @@
         transition: transform 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
-        z-index: 6000; 
+        z-index: 6000;
+
+        &Full {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
     }
 
     &Header {
@@ -35,7 +40,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 6100; 
+            z-index: 6100;
+
+            &Full {
+                top: 7px;
+                right: 7px;
+            }
         }
 
         &_arrow {

@@ -11,6 +11,8 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 
 	const [modalType, setModalType] = useState("")
 	const [getMoveStarted, setMoveStarted] = useState(false)
+	const [smallModalHeight, setSmallModalHeight] = useState(null)
+
 	let startY = null
 	const {device} = context.state
 
@@ -55,12 +57,12 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 	}
 
 	return (
-		<div className={styles.mapModalWindow}
+		<div className={`${styles.mapModalWindow} ${modalType === "full" ? styles.mapModalWindowFull : ""}`}
 			style={{
 				bottom: `-${height}px`,
 				height: `${height}px`,
 				transform: modalType === "small"
-					? `translateY(-216px)`
+					? `translateY(-${smallModalHeight}px)`
 					: modalType === "full"
 						? `translateY(-${height}px)`
 						: `translateY(0)`
@@ -94,7 +96,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 				}
 			</div>
 
-			<div className={styles.mapModalHeader_close}
+			<div className={`${styles.mapModalHeader_close} ${modalType === "full" ? styles.mapModalHeader_closeFull : ""}`}
 				onClick={ onCloseModal }
 			>
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,6 +121,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 							touchMove={handleTouchMove}
 							touchEnd={handleTouchEnd}
 							onFullModalClick={onFullModal}
+							getInfoHeight={setSmallModalHeight}
 						/>
 
 						{device !== "mobile" &&
