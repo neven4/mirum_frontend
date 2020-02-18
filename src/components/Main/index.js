@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import Context from "../../Context/Context"
+import {CafesContext, DeviceContext} from "../../Context/AppProvider"
 import styles from './styles.module.scss';
 
 import MainCard from '../MainCard';
@@ -7,10 +7,10 @@ import MainModal from "../MainModal"
 import PostCard from "../PostCard"
 
 const Main = props => {
-	const context = useContext(Context)
+	const cafes = useContext(CafesContext)
+	const device = useContext(DeviceContext)
 	const {id} = props.match.params
-	const {device} = context.state
-	const cafes = context.state.cafes.read()
+	console.log(cafes)
 
 	return (
 		<>

@@ -41,4 +41,4 @@ const MainModal = props => {
 	)
 }
 
-export default withRouter(MainModal);
+export default withRouter(React.memo(MainModal));

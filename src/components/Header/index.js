@@ -1,13 +1,12 @@
 import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
-import Context from "../../Context/Context"
+import {DeviceContext} from "../../Context/AppProvider"
 import Footer from "../Footer"
 
 import styles from './styles.module.scss';
 
 const Header = () => {
-	const context = useContext(Context)
-	const {device} = context.state
+	const device = useContext(DeviceContext)
 
 	return (
 		<header className={ styles.header }>

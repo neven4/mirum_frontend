@@ -1,19 +1,19 @@
 import React, {useContext, useState, useLayoutEffect} from 'react';
-import Context from "../../Context/Context"
+import {LikedCafesContext} from "../../Context/AppProvider"
 
 import styles from './styles.module.scss';
 
 const Like = ({ numOfLikes, className, id }) => {	
-	const context = useContext(Context)
+	const context = useContext(LikedCafesContext)
 	const [likesNum, setLikesNum] = useState(0)
-	const isLiked = context.state.likedCafes.includes(id)
+	const isLiked = context.likedCafes.includes(id)
 
 	useLayoutEffect(() => {
 		setLikesNum(Number(numOfLikes))
 	}, [])
 
 	const handleLikeClick = () => {
-		const newLikedPosts = [...context.state.likedCafes]
+		const newLikedPosts = [...context.likedCafes]
 		let likeState
 
 		if (!isLiked) {
@@ -21,17 +21,13 @@ const Like = ({ numOfLikes, className, id }) => {
 			likeState = "inc"
 			setLikesNum(likesNum + 1)
 
-			context.update({
-				likedCafes: newLikedPosts
-			})
+			context.update(newLikedPosts)
 		} else {
 			const removedLikeArr = newLikedPosts.filter(el => el !== id)
 			likeState = "dec"
 			setLikesNum(likesNum - 1)
 	
-			context.update({
-				likedCafes: removedLikeArr
-			})
+			context.update(removedLikeArr)
 
 		}
 

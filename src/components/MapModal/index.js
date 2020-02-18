@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import Context from '../../Context/Context';
+import {DeviceContext} from '../../Context/AppProvider';
 
 import styles from './styles.module.scss';
 
@@ -7,14 +7,13 @@ import SmallInfo from '../ModalSmallInfo';
 import PostCard from '../PostCard';
 
 const MapModal = ({ type, height, data, onClose, onFullModal }) => {
-	const context = useContext(Context)
+	const device = useContext(DeviceContext)
 
 	const [modalType, setModalType] = useState("")
 	const [getMoveStarted, setMoveStarted] = useState(false)
 	const [smallModalHeight, setSmallModalHeight] = useState(null)
 
 	let startY = null
-	const {device} = context.state
 
 	useEffect(() => {
 		if (device !== "mobile" && type === "full") {
@@ -23,6 +22,10 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 			setModalType(type)
 		}
 	}, [type])
+
+	useEffect(() => {
+		console.log("pep")
+	})
 
 	const handleTouchStart = e => {
 		startY = e.nativeEvent.touches[0].clientY

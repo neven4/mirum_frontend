@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Context from "../../Context/Context"
+import {CafesContext} from "../../Context/AppProvider"
 
 import styles from './styles.module.scss';
 
@@ -10,12 +10,12 @@ import Carousel from "../Carousel"
 
 
 const PostCard = props => {
-	const context = useContext(Context)
+	const cafes = useContext(CafesContext)
 	const id = props.data ? props.data.id : props.id
 
 	const postData = props.data
 		? props.data
-		: context.state.cafes.read().find(el => el.id === id)
+		: cafes.cafes.find(el => el.id === id)
 
 	const {
 		title,

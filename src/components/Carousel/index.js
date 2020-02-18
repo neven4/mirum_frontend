@@ -1,11 +1,8 @@
 import React from 'react';
-import Context from "../../Context/Context"
 
 import styles from './styles.module.scss';
 
 class Slider extends React.Component {
-    static contextType = Context
-
     isOx = null;
     isOy = null;
     lastTouch = 0;
@@ -106,9 +103,9 @@ class Slider extends React.Component {
 
     transitionTo = (index, duration) => {
         this.setState({
-        currentIndex: index,
-        movement: index * this.state.imageWidth,
-        transitionDuration: `${duration}s`,
+            currentIndex: index,
+            movement: index * this.state.imageWidth,
+            transitionDuration: `${duration}s`,
         });
     }
     render() {
@@ -204,4 +201,4 @@ class Slider extends React.Component {
     }
 }
 
-export default Slider;
+export default React.memo(Slider);

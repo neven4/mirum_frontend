@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import Context from "../../Context/Context"
+import {ShareModalContext} from "../../Context/AppProvider"
 
 import styles from './styles.module.scss';
 
 const ShareBtn = ({className, id, page}) => {
-    const context = useContext(Context)
+    const context = useContext(ShareModalContext)
     const openModal = () => {
         context.update({
             shareModalOpen: true,

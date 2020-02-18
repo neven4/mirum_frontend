@@ -1,6 +1,6 @@
 import React, {Suspense, useContext} from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Context from "../../Context/Context"
+import {DeviceContext} from "../../Context/AppProvider"
 import GA from "../../Utils/GoogleAnalytics"
 
 import styles from './styles.module.scss';
@@ -13,8 +13,7 @@ import MapPage from "../Map"
 import Main from "../Main"
 
 const App = () => {
-	const context = useContext(Context)
-	const {device} = context.state
+	const device = useContext(DeviceContext)
 
 	return (
 		<Router>

@@ -1,5 +1,5 @@
-import React, { useContext, useLayoutEffect } from 'react';
-import Context from "../../Context/Context"
+import React, { useContext, useLayoutEffect, useEffect } from 'react';
+import {CafesContext, DeviceContext} from "../../Context/AppProvider"
 
 import styles from './styles.module.scss';
 
@@ -10,13 +10,14 @@ import Carousel from "../Carousel"
 
 
 const PostCard = props => {
-	const context = useContext(Context)
+	const cafes = useContext(CafesContext)
+	const device = useContext(DeviceContext)
 	const id = props.data ? props.data.id : props.id
 	const {isModal} = props
 
 	const postData = props.data
 		? props.data
-		: context.state.cafes.read().find(el => el.id === id)
+		: cafes.cafes.find(el => el.id === id)
 
 	const {
 		title,
@@ -30,7 +31,7 @@ const PostCard = props => {
 	} = postData
 
 	useLayoutEffect(() => {
-		if (context.state.device === "mobile") {
+		if (device === "mobile") {
 			window.scrollTo(0, 0);
 		}
 	}, [])

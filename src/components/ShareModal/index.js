@@ -1,28 +1,30 @@
 import React, {useState, useLayoutEffect, useContext} from 'react';
-import Context from "../../Context/Context"
+import {ShareModalContext, DeviceContext, CafesContext} from "../../Context/AppProvider"
 
 import styles from './styles.module.scss';
 
 const ShareModal = () => {
-    const context = useContext(Context)
-    const {device, cafes} = context.state
-    const isModalOpen = context.state.shareModalOpen
-    const modalPage = context.state.shareModalPage
-    const postId = context.state.shareModalId
+    const shareModalData = useContext(ShareModalContext)
+    const device = useContext(DeviceContext)
+    const cafes = useContext(CafesContext)
+    const isModalOpen = shareModalData.data.shareModalOpen
+    const modalPage = shareModalData.data.shareModalPage
+    const postId = shareModalData.data.shareModalId
+
     const [copy, setCopy] = useState(false)
     const [currentCafe, setCurrentCafe] = useState(null)
 
     useLayoutEffect(() => {
         if (isModalOpen) {
             document.body.style.overflow = "hidden"
-            setCurrentCafe(cafes.read().find(el => el.id === postId))
+            setCurrentCafe(cafes.cafes.find(el => el.id === postId))
         } else {
             document.body.style.overflow = ""
         }
     }, [isModalOpen])
 
     const onModalClose = () => {
-        context.update({
+        shareModalData.update({
             shareModalOpen: false,
             shareModalPage: null,
             shareModalId: null

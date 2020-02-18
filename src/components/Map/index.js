@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState, useLayoutEffect} from 'react';
-import Context from '../../Context/Context';
+import {CafesContext, DeviceContext} from '../../Context/AppProvider';
 import MarkerClusterer from "@google/markerclustererplus"
 
 import styles from './styles.module.scss';
@@ -13,10 +13,10 @@ import MapSearch from "../MapSearch"
 import {standartMap, bigMap} from "./mapStyle"
 
 const MapPage = props => {
-	const context = useContext(Context)
-	const cafes = context.state.cafes.read()
+	const cafesState = useContext(CafesContext)
+	const device = useContext(DeviceContext)
 	const urlId = props.match.params.id
-	const {device} = context.state
+	console.log(cafesState)
 
 	const [isLoading, setIsLoading] = useState(true)
 	const [modalType, setModalType] = useState("")
@@ -39,6 +39,12 @@ const MapPage = props => {
 			document.body.appendChild(script);
 		}
 	}, []);
+
+	useEffect(() => {
+		if (localMapId && cafesState.cafes) {
+			initPlaces(localMapId)
+		}
+	}, [cafesState])
 
 	const initMap = () => {
 		if (window.navigator.geolocation) {
@@ -90,7 +96,7 @@ const MapPage = props => {
 			} else {
 				map.setOptions({styles: standartMap})
 			}
-		});
+		})
 
 		setLocalMapId(map)
 		setIsLoading(false)
@@ -158,7 +164,7 @@ const MapPage = props => {
 	const initPlaces = async (map) => {
 		const MarkerWithLabel = await import("@google/markerwithlabel").then(foo => foo.default)
 
-		const markerPlaces = await cafes.map(cafe => {
+		const markerPlaces = await cafesState.cafes && cafesState.cafes.map(cafe => {
 			const pos = new window.google.maps.LatLng(cafe.addressCoord[0], cafe.addressCoord[1]);
 			const textLength = cafe.title.length
 			const labelWidth = (textLength) * 8
@@ -215,7 +221,7 @@ const MapPage = props => {
 
 	useEffect(() => {
 		if (urlId && localMapId) {
-			const dataFromId = cafes.find(el => el.id === urlId)
+			const dataFromId = cafesState.cafes && cafesState.cafes.find(el => el.id === urlId)
 			localMapId.setZoom(16)
 			localMapId.setCenter({
 				lat: dataFromId.addressCoord[0],
@@ -262,7 +268,7 @@ const MapPage = props => {
 			{isSearchShow &&
 				<MapSearch
 					setSearchShow={setSearchShow}
-					cafes={cafes}
+					cafes={cafesState.cafes}
 					onItemClick={onSuggestInputClick}
 				/>
 			}
