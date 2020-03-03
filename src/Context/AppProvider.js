@@ -6,22 +6,18 @@ const cafes = fetchCafes()
 
 class AppProvider extends Component {
     state = {
-        width: null, 
-        coords: null,
-        placeCoords: null,
         cafes: cafes,
         likedCafes: [],
         shareModalOpen: false,
         shareModalPage: null,
         shareModalId: null,
         device: null,
-        map: null
     };
 
     componentDidMount() {
-        window.addEventListener("resize", this.updateScreenWidth)
+        window.addEventListener("resize", this.setDevice)
         window.addEventListener("pagehide", this.saveToStorage)
-        this.updateScreenWidth()
+        this.setDevice()
 
         const newLikedCafes = JSON.parse(localStorage.getItem("likedCafes"))
 
@@ -32,35 +28,19 @@ class AppProvider extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const {width} = this.state
-        if (prevState.width !== width) {
-            this.setDevice(width)
-        }
-    }
-
     componentWillUnmount() {
         this.saveToStorage()
-        window.removeEventListener("resize", this.updateScreenWidth)
+        window.removeEventListener("resize", this.setDevice)
         window.removeEventListener("pagehide", this.saveToStorage)  
     }
 
     saveToStorage = () => {
         localStorage.setItem("likedCafes", JSON.stringify(this.state.likedCafes))
     }
-
-    updateScreenWidth = () => {
-        const width = window.innerWidth
-		this.setState({
-			width
-		}, () => {
-            if (!this.state.device) {
-                this.setDevice(width)
-            }
-        })
-    }
     
-    setDevice = (width) => {
+    setDevice = () => {
+        const width = window.innerWidth
+
         let device = ""
         if (width <= 650) {
             device = "mobile"

@@ -20,9 +20,13 @@ const Main = props => {
 					<h2>Лучшее</h2>
 
 					<article className={ styles.main_container }>
-						{cafes && cafes.map((el, i) => 
-							<MainCard data={el} key={`mainCard_${i}`}/>
-						)}
+						{cafes &&
+							cafes
+								.sort((a, b) => b.likes - a.likes)
+								.map((el, i) => 
+									<MainCard data={el} key={`mainCard_${i}`}/>
+								)
+						}
 					</article>
 
 					{id &&

@@ -5,6 +5,7 @@ import MarkerClusterer from "@google/markerclustererplus"
 import styles from './styles.module.scss';
 
 import place from '../../images/place.svg'
+import placeSelected from '../../images/placeSelected.svg'
 import geo from "../../images/geo.svg"
 import MapModal from '../MapModal';
 import MapTabletFullModal from '../MapTabletFullModal';
@@ -42,7 +43,7 @@ const MapPage = props => {
 
 	const initMap = () => {
 		if (window.navigator.geolocation) {
-			window.navigator.geolocation.getCurrentPosition(function(position) {
+			window.navigator.geolocation.getCurrentPosition((position) => {
 				const state = {
 					center: {
 						lat: position.coords.latitude,
@@ -59,6 +60,8 @@ const MapPage = props => {
 				}
 	
 				createMap(state)
+			}, {
+				timeout: 2000
 			})
 		} else {
 			const state = {
@@ -157,8 +160,9 @@ const MapPage = props => {
 
 	const initPlaces = async (map) => {
 		const MarkerWithLabel = await import("@google/markerwithlabel").then(foo => foo.default)
+		let selectedIndex
 
-		const markerPlaces = await cafes.map(cafe => {
+		const markerPlaces = await cafes.map((cafe, i) => {
 			const pos = new window.google.maps.LatLng(cafe.addressCoord[0], cafe.addressCoord[1]);
 			const textLength = cafe.title.length
 			const labelWidth = (textLength) * 8
@@ -191,10 +195,20 @@ const MapPage = props => {
 				map.setZoom(16)
 				map.setCenter(placeMarker.getPosition())
 				openSmallModal(cafe)
+				markerCallback(placeMarker, i)
 			})
 
 			return placeMarker
 		})
+
+		const markerCallback = (marker, i) => {
+			if (selectedIndex) {
+				markerPlaces[selectedIndex].icon.url = place
+			}
+
+			marker.icon.url = placeSelected;
+			selectedIndex = i
+		}
 
 		new MarkerClusterer(map, markerPlaces,
 			{
