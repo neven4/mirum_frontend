@@ -1,10 +1,15 @@
 import React, {useLayoutEffect} from 'react';
 import styles from './styles.module.scss';
-import {withRouter} from "react-router-dom"
+import {withRouter, RouteComponentProps} from "react-router-dom"
 
 import PostCard from "../PostCard"
 
-const MainModal = props => {
+
+type PropsType = RouteComponentProps & {
+    id: string
+}
+
+const MainModal: React.FC<PropsType> = props => {
 	const {id} = props
 
 	const closeModal = () => {
@@ -14,7 +19,9 @@ const MainModal = props => {
 	useLayoutEffect(() => {
 		document.body.style.overflow = "hidden"
 		
-		return () => document.body.style.overflow = ""
+		return () => {
+			document.body.style.overflow = ""
+		}
     }, [])
 
 	return (

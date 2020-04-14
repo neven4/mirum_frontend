@@ -1,19 +1,28 @@
-import React, {useState, useEffect, useContext} from 'react';
-import Context from '../../Context/Context';
+import React, {useState, useEffect, useContext, TouchEvent} from 'react';
+import Context, {IContext} from '../../Context/Context';
+import {Data} from "../Main"
 
 import styles from './styles.module.scss';
 
 import SmallInfo from '../ModalSmallInfo';
 import PostCard from '../PostCard';
 
-const MapModal = ({ type, height, data, onClose, onFullModal }) => {
-	const context = useContext(Context)
+interface Props {
+	type: string,
+	height: number,
+	data: Data,
+	onClose: () => void,
+	onFullModal: () => void,
+}
 
-	const [modalType, setModalType] = useState("")
-	const [getMoveStarted, setMoveStarted] = useState(false)
-	const [smallModalHeight, setSmallModalHeight] = useState(null)
+const MapModal: React.FC<Props> = ({ type, height, data, onClose, onFullModal }) => {
+	const context = useContext<IContext>(Context)
 
-	let startY = null
+	const [modalType, setModalType] = useState<string>("")
+	const [getMoveStarted, setMoveStarted] = useState<boolean>(false)
+	const [smallModalHeight, setSmallModalHeight] = useState<number | null>(null)
+
+	let startY: number
 	const {device} = context.state
 
 	useEffect(() => {
@@ -24,11 +33,11 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 		}
 	}, [type])
 
-	const handleTouchStart = e => {
+	const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
 		startY = e.nativeEvent.touches[0].clientY
 	};
 
-	const handleTouchMove = e => {
+	const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
 		const delta = startY - e.nativeEvent.touches[0].clientY
 
 		if (!getMoveStarted) {
@@ -41,7 +50,7 @@ const MapModal = ({ type, height, data, onClose, onFullModal }) => {
 		startY = 0;
 	}
 
-	const handleMovement = delta => {
+	const handleMovement = (delta: number) => {
 		setMoveStarted(true)
 
 		if (delta > 0 && modalType === "small") {

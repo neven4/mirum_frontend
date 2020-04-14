@@ -1,9 +1,23 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-const Metro = props => {
+interface Props {
+	history: string
+}
+
+type PropsType = RouteComponentProps<Props> & {
+    className?: string,
+	id?: string,
+	withClick?: boolean,
+	label: string,
+	withArrow?: boolean,
+	metro: string,
+	fitSmall?: boolean
+}
+
+const Metro: React.FC<PropsType> = props => {
 	const {
 		className,
 		id,
@@ -14,8 +28,10 @@ const Metro = props => {
 		fitSmall
 	} = props
 
-	const onMetroClick = () => {
-		props.history.push(`/map/${id}`)
+	const onMetroClick = (): void => {
+		if (withClick) {
+			props.history.push(`/map/${id}`)
+		}
 	}
 
 	const getMetroColor = () => {
@@ -106,8 +122,9 @@ const Metro = props => {
 	}
 
 	return (
-		<section className={ `${ styles.metro } ${ withClick ? styles.withClick : "" } ${ className }`}
-			onClick={withClick ? onMetroClick : null}
+		<section
+			className={ `${ styles.metro } ${ withClick ? styles.withClick : "" } ${ className }`}
+			onClick={onMetroClick}
 		>
 			<div className={ styles.metro_icon }
 				style={{backgroundColor: getMetroColor()}}

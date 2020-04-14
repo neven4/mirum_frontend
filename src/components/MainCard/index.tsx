@@ -1,13 +1,18 @@
 import React, { useRef, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {Data} from "../Main"
 
 import styles from './styles.module.scss';
 
 import Like from '../Like';
 import Metro from '../Metro';
 
-const MainCard = ({ data }) => {
-	const targetRef = useRef();
+interface Props {
+	data: Data
+}
+
+const MainCard: React.FC<Props> = ({ data }) => {
+	const targetRef = useRef<HTMLDivElement>(null);
 	const [width, setWidth] = useState(0);
 
 	useLayoutEffect(() => {

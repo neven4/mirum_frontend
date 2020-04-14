@@ -1,7 +1,7 @@
 import fetchPromise from "./fetchingPromise"
 
 function fetchCafes() {
-    let resCopy
+    let resCopy: Response
     const promise = fetch("https://europe-west1-mirum-e30cc.cloudfunctions.net/api/cafes")
         .then((res) => {
             resCopy = res.clone()
@@ -17,7 +17,7 @@ function fetchCafes() {
         .catch(() => {
             if (window.caches) {
                 return window.caches.match("cafesData")
-                    .then(response => response.json())
+                    .then(response => response ? response.json() : null)
             }
         })
   

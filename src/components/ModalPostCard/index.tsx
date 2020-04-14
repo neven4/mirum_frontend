@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import Context from "../../Context/Context"
+import Context, {IContext} from "../../Context/Context"
+import {Data} from "../Main"
 
 import styles from './styles.module.scss';
 
@@ -8,14 +9,19 @@ import Metro from '../Metro';
 import ShareBtn from '../ShareBtn';
 import Carousel from "../Carousel"
 
+interface Props {
+	data?: Data,
+	id: string,
+	disableAddress: boolean,
+}
 
-const PostCard = props => {
-	const context = useContext(Context)
-	const id = props.data ? props.data.id : props.id
+const PostCard: React.FC<Props> = (props) => {
+	const context = useContext<IContext>(Context)
+	const id: string = props.data ? props.data.id : props.id
 
-	const postData = props.data
+	const postData: Data = props.data
 		? props.data
-		: context.state.cafes.read().find(el => el.id === id)
+		: context.state.cafes.read().find((el: Data) => el.id === id)
 
 	const {
 		title,
@@ -44,7 +50,8 @@ const PostCard = props => {
 					/>
 				</div>
 
-				<Metro className={ styles.postCardAdress }
+				<Metro
+					className={ styles.postCardAdress }
 					label={addressName}
 					metro={metroName}
 					withArrow={props.disableAddress ? false : true}

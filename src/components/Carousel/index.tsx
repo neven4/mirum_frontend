@@ -1,37 +1,53 @@
 import React from 'react';
-import Context from "../../Context/Context"
+import Context, {IContext} from "../../Context/Context"
+import {IPhoto} from "../Main"
 
 import styles from './styles.module.scss';
 
-class Slider extends React.Component {
+interface Props {
+    images: IPhoto[],
+    authorInside?: boolean
+}
+
+interface State {
+    imgs: IPhoto[],
+    currentIndex: number,
+    movement: number,
+    transitionDuration: string,
+    imageWidth: number
+}
+
+class Slider extends React.Component<Props, State> {
     static contextType = Context
 
-    isOx = null;
-    isOy = null;
+    isOx: boolean | null = null;
+    isOy: boolean | null = null;
+    startY: number = 0;
+    startX: number = 0;
     lastTouch = 0;
-    sliderDiv = React.createRef()
+    sliderDiv: React.RefObject<HTMLDivElement> = React.createRef()
     state = {
         imgs: [],
         currentIndex: 0,
         movement: 0,
         transitionDuration: "0s",
-        imageWidth: null
+        imageWidth: 0
     };
 
     componentDidMount() {
         this.setState({
-            imageWidth: this.sliderDiv.current.offsetWidth,
+            imageWidth: this.sliderDiv.current ? this.sliderDiv.current.offsetWidth : 0,
             imgs: this.props.images
         })
     }
 
-    handleTouchStart = e => {
+    handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         this.lastTouch = e.nativeEvent.touches[0].clientX;
         this.startY = e.nativeEvent.touches[0].clientY;
         this.startX = e.nativeEvent.touches[0].clientX;
     };
 
-    handleTouchMove = e => {
+    handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
         const delta = this.lastTouch - e.nativeEvent.touches[0].clientX;
         const lastX = e.nativeEvent.touches[0].clientX - this.startX
         this.lastTouch = e.nativeEvent.touches[0].clientX;
@@ -62,16 +78,17 @@ class Slider extends React.Component {
         this.isOy = null
     }
 
-    handleMovement = delta => {
+    handleMovement = (delta: number) => {
         const maxLength = this.state.imgs.length - 1;
         let nextMovement = this.state.movement + delta;
+        const {imageWidth} = this.state
 
         if (nextMovement < 0) {
             nextMovement = 0;
         }
 
-        if (nextMovement > maxLength * this.state.imageWidth) {
-            nextMovement = maxLength * this.state.imageWidth;
+        if (nextMovement > maxLength * imageWidth) {
+            nextMovement = maxLength * imageWidth;
         }
 
         this.setState({
@@ -96,15 +113,16 @@ class Slider extends React.Component {
         }
         } else if (deltaInteger < 0) {
             nextIndex = currentIndex - Math.abs(deltaInteger);
-        if (endPartial > 0.9) {
-            nextIndex += 1;
-        }
+
+            if (endPartial > 0.9) {
+                nextIndex += 1;
+            }
         }
 
         this.transitionTo(nextIndex, Math.min(0.5, 1 - Math.abs(endPartial)));
     }
 
-    transitionTo = (index, duration) => {
+    transitionTo = (index: number, duration: number) => {
         this.setState({
         currentIndex: index,
         movement: index * this.state.imageWidth,
@@ -142,7 +160,7 @@ class Slider extends React.Component {
                                 transitionDuration: transitionDuration,
                             }}
                         >
-                            {imgs.map((el, i) => {
+                            {imgs.map((el: IPhoto, i) => {
                                 return <div key={i}
                                     className={styles.imageHolder}
                                 >
@@ -194,7 +212,7 @@ class Slider extends React.Component {
                     </div>
                 </div>
                 <p className={ `${styles.authorText} ${this.props.authorInside ? styles.authorTextInside : ""}`}>
-                    {imgs && imgs[currentIndex] && imgs[currentIndex].author
+                    {imgs && imgs[currentIndex] && imgs[currentIndex]["author"]
                         ? `Источник: ${imgs[currentIndex]["author"]}`
                         : ""
                     }

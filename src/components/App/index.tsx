@@ -1,6 +1,6 @@
 import React, {Suspense, useContext} from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Context from "../../Context/Context"
+import Context, {IContext} from "../../Context/Context"
 import GA from "../../Utils/GoogleAnalytics"
 
 import styles from './styles.module.scss';
@@ -12,7 +12,7 @@ import Spiner from '../Spiner';
 import MapPage from "../Map"
 import Main from "../Main"
 
-const App = () => {
+const App: React.FC = () => {
 	const context = useContext(Context)
 	const {device} = context.state
 

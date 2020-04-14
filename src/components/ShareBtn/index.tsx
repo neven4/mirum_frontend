@@ -1,10 +1,16 @@
 import React, {useContext} from 'react';
-import Context from "../../Context/Context"
+import Context, {IContext} from "../../Context/Context"
 
 import styles from './styles.module.scss';
 
-const ShareBtn = ({className, id, page}) => {
-    const context = useContext(Context)
+interface Props {
+    className?: string,
+    id?: string,
+    page: string
+}
+
+const ShareBtn: React.FC<Props> = ({className, id, page}) => {
+    const context = useContext<IContext>(Context)
     const openModal = () => {
         context.update({
             shareModalOpen: true,

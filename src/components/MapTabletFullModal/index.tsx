@@ -1,10 +1,15 @@
 import React from 'react';
+import PostCard from '../PostCard';
+import {Data} from "../Main"
 
 import styles from './styles.module.scss';
 
-import PostCard from '../PostCard';
+interface Props {
+	data: Data,
+	onSmallClick: () => void
+}
 
-const MapModal = ({ data, onSmallClick }) => {
+const MapModal: React.FC<Props> = ({ data, onSmallClick }) => {
 	return (
 		<div className={styles.mapFullModalWindow}>
 			<div

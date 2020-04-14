@@ -1,6 +1,6 @@
-function wrapPromise(promise) {
+function wrapPromise(promise: Promise<Response>) {
     let status = 'pending'
-    let response
+    let response: Response
   
     const suspender = promise.then(
       (res) => {

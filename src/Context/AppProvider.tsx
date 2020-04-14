@@ -4,7 +4,22 @@ import fetchCafes from "../Utils/fetchCafes"
 
 const cafes = fetchCafes()
 
-class AppProvider extends Component {
+interface Props {
+    children: React.ReactNode
+}
+
+export interface State {
+    cafes: {
+        read: () => any
+    };
+    likedCafes: string[];
+    shareModalOpen: boolean;
+    shareModalPage: string | null;
+    shareModalId: string | null;
+    device: string | null;
+}
+
+class AppProvider extends Component<Props, State> {
     state = {
         cafes: cafes,
         likedCafes: [],
@@ -18,8 +33,9 @@ class AppProvider extends Component {
         window.addEventListener("resize", this.setDevice)
         window.addEventListener("pagehide", this.saveToStorage)
         this.setDevice()
+        const storageLikedCafes: string = localStorage.getItem("likedCafes") || ""
 
-        const newLikedCafes = JSON.parse(localStorage.getItem("likedCafes"))
+        const newLikedCafes: [] = JSON.parse(storageLikedCafes)
 
         if (newLikedCafes && Array.isArray(newLikedCafes)) {
             this.setState({
@@ -34,14 +50,15 @@ class AppProvider extends Component {
         window.removeEventListener("pagehide", this.saveToStorage)  
     }
 
-    saveToStorage = () => {
-        localStorage.setItem("likedCafes", JSON.stringify(this.state.likedCafes))
+    saveToStorage = () : void => {
+        const {likedCafes} : {likedCafes: string[]} = this.state
+        localStorage.setItem("likedCafes", JSON.stringify(likedCafes))
     }
     
     setDevice = () => {
         const width = window.innerWidth
 
-        let device = ""
+        let device: string = ""
         if (width <= 650) {
             device = "mobile"
         } else if (width > 650 && width < 1100) {
@@ -57,11 +74,13 @@ class AppProvider extends Component {
         }
     }
 
-    updateState = (newState) => {
+    updateState = (newState: any): void => {
         this.setState({...this.state, ...newState})
     }
 
     render() {
+        const {children} = this.props
+
         return (
             <Context.Provider
                 value={{
@@ -69,7 +88,7 @@ class AppProvider extends Component {
                     update: this.updateState
                 }}
             >
-                {this.props.children}
+                {children}
             </Context.Provider>
         );
     }

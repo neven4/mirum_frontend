@@ -1,10 +1,16 @@
-import React, {useState, useLayoutEffect} from "react"
-
+import React, {useState, useLayoutEffect, ChangeEvent} from "react"
+import {Data} from "../Main"
 import styles from './styles.module.scss';
 
-const MapSearch = ({ setSearchShow, cafes, onItemClick }) => {
-    const [searchValue, setSearchValue] = useState("")
-    const [showSuggestedList, setShowSuggestedList] = useState(false)
+interface Props {
+    setSearchShow: (state: boolean) => void 
+    cafes: Data[],
+    onItemClick: (item: Data) => void
+}
+
+const MapSearch: React.FC<Props> = ({ setSearchShow, cafes, onItemClick }) => {
+    const [searchValue, setSearchValue] = useState<string>("")
+    const [showSuggestedList, setShowSuggestedList] = useState<boolean>(false)
 
     useLayoutEffect(() => {
         document.addEventListener("click", outsideEventListener)
@@ -16,7 +22,7 @@ const MapSearch = ({ setSearchShow, cafes, onItemClick }) => {
         setShowSuggestedList(false)
     }
 
-    const onInputChange = (el) => {
+    const onInputChange = (el: ChangeEvent<HTMLInputElement>) => {
         if (!showSuggestedList) {
             setShowSuggestedList(true)
         }

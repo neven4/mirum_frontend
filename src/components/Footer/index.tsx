@@ -1,9 +1,18 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-const Footer = props => {
+interface Props {
+	pathname: string;
+}
+
+// Your component own properties
+type PropsType = RouteComponentProps<Props> & {
+    inHeader?: boolean,
+}
+
+const Footer: React.FC<PropsType> = props => {
 	const {pathname} = props.location
 	return (
 		<footer className={ `${styles.footer} ${props.inHeader ? styles.footer_inHeader : ""}` }>

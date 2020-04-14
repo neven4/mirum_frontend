@@ -1,21 +1,46 @@
 import React, {useContext, useRef, useLayoutEffect} from 'react';
-import Context from '../../Context/Context';
+import Context, {IContext} from '../../Context/Context';
+import {Data} from "../Main"
 
 import styles from './styles.module.scss';
 import ShareBtn from '../ShareBtn';
 import Like from '../Like';
 
-const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd, onFullModalClick, getInfoHeight }) => {
-    const smallModalRef = useRef(null);
-    const context = useContext(Context)
+interface Props {
+    data: Data,
+    touchStart: (e: React.TouchEvent<HTMLDivElement>) => void,
+    touchMove: (e: React.TouchEvent<HTMLDivElement>) => void,
+    touchEnd: (e: React.TouchEvent<HTMLDivElement>) => void,
+    onFullModalClick: () => void,
+    getInfoHeight: (heigth: number) => void
+}
+
+const ModalSmallInfo: React.FC<Props> = ({
+    data,
+    touchStart,
+    touchMove,
+    touchEnd,
+    onFullModalClick,
+    getInfoHeight
+}) => {
+    const smallModalRef = useRef<HTMLDivElement>(null);
+    const context = useContext<IContext>(Context)
     const { title, smallText, photos, id, likes, instagramLink } = data
     const { device } = context.state
 
     useLayoutEffect(() => {
-        const height = device === "mobile" ? +smallModalRef.current.offsetHeight + 35 : 216
+        const height = device === "mobile" && smallModalRef.current
+            ? +smallModalRef.current.offsetHeight + 35
+            : 216
 
         getInfoHeight(height)
     }, [])
+
+    const fullModalClick = (e: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => {
+        if (device !== "mobile") {
+            onFullModalClick()
+        }
+    }
 
     return (
         <div
@@ -30,7 +55,7 @@ const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd, onFullModalClic
             >
                 <div
                     className={styles.smallModal_img}
-                    onClick={device !== "mobile" ? onFullModalClick : null}
+                    onClick={fullModalClick}
                 >
                     <img
                         alt={`Main Cafe img. author: ${photos[0].author}`}
@@ -45,11 +70,11 @@ const ModalSmallInfo = ({ data, touchStart, touchMove, touchEnd, onFullModalClic
                     </p>
                 </div>
                 <div className={styles.smallModal_info}>
-                    <h2 onClick={device !== "mobile" ? onFullModalClick : null}>{title}</h2>
+                    <h2 onClick={fullModalClick}>{title}</h2>
                         
                     <p
                         className={styles.smallModal_about}
-                        onClick={device !== "mobile" ? onFullModalClick : null}
+                        onClick={fullModalClick}
                     > 
                         {smallText}
                     </p>

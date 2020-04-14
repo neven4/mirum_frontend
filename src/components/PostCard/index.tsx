@@ -1,5 +1,6 @@
 import React, { useContext, useLayoutEffect } from 'react';
-import Context from "../../Context/Context"
+import Context, {IContext} from "../../Context/Context"
+import {Data} from "../Main"
 
 import styles from './styles.module.scss';
 
@@ -8,15 +9,24 @@ import Metro from '../Metro';
 import ShareBtn from '../ShareBtn';
 import Carousel from "../Carousel"
 
+interface Props {
+	data?: Data,
+	id?: string,
+	disableAddress?: boolean,
+	isModal?: boolean,
+}
 
-const PostCard = props => {
-	const context = useContext(Context)
-	const id = props.data ? props.data.id : props.id
-	const {isModal} = props
 
-	const postData = props.data
-		? props.data
-		: context.state.cafes.read().find(el => el.id === id)
+const PostCard: React.FC<Props> = props => {
+	const context = useContext<IContext>(Context)
+	const {isModal, disableAddress, data} = props
+
+	const id = data ? data.id : props.id
+	
+
+	const postData = data
+		? data
+		: context.state.cafes.read().find((el: Data) => el.id === id)
 
 	const {
 		title,
@@ -49,7 +59,7 @@ const PostCard = props => {
 					</h1>
 
 					<ShareBtn
-						page={props.data ? "map" : "cafes"}
+						page={data ? "map" : "cafes"}
 						id={id}
 					/>
 				</div>
@@ -57,8 +67,8 @@ const PostCard = props => {
 				<Metro className={ styles.postCardAdress }
 					label={addressName}
 					metro={metroName}
-					withArrow={props.disableAddress ? false : true}
-					withClick={props.disableAddress ? false : true}
+					withArrow={disableAddress ? false : true}
+					withClick={disableAddress ? false : true}
 					id={id}
 				/>
 				
@@ -66,7 +76,7 @@ const PostCard = props => {
 					<Like
 						className={ styles.postCardLike }
 						numOfLikes={likes}
-						id={id}
+						id={id ? id : ""}
 					/>
 
 					<a

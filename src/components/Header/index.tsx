@@ -1,12 +1,12 @@
 import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
-import Context from "../../Context/Context"
+import Context, {IContext} from "../../Context/Context"
 import Footer from "../Footer"
 
 import styles from './styles.module.scss';
 
-const Header = () => {
-	const context = useContext(Context)
+const Header: React.FC = () => {
+	const context = useContext<IContext>(Context)
 	const {device} = context.state
 
 	return (

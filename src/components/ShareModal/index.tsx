@@ -1,21 +1,21 @@
 import React, {useState, useLayoutEffect, useContext} from 'react';
-import Context from "../../Context/Context"
-
+import Context, {IContext} from "../../Context/Context"
+import {Data} from "../Main"
 import styles from './styles.module.scss';
 
-const ShareModal = () => {
-    const context = useContext(Context)
+const ShareModal: React.FC = () => {
+    const context = useContext<IContext>(Context)
     const {device, cafes} = context.state
     const isModalOpen = context.state.shareModalOpen
     const modalPage = context.state.shareModalPage
     const postId = context.state.shareModalId
     const [copy, setCopy] = useState(false)
-    const [currentCafe, setCurrentCafe] = useState(null)
+    const [currentCafe, setCurrentCafe] = useState<Data | null>(null)
 
     useLayoutEffect(() => {
         if (isModalOpen) {
             document.body.style.overflow = "hidden"
-            setCurrentCafe(cafes.read().find(el => el.id === postId))
+            setCurrentCafe(cafes.read().find((el: Data) => el.id === postId))
         } else {
             document.body.style.overflow = ""
         }
@@ -72,7 +72,7 @@ const ShareModal = () => {
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 112.196 112.196"
-                                        style={{enableBackground: "new 0 0 112.196 112.196"}}
+                                        // style={{enableBackground: "new 0 0 112.196 112.196"}} ts err
                                         xmlSpace="preserve"
                                     >
                                         <g>

@@ -13,6 +13,7 @@ import Spiner from "../Spiner"
 import MapSearch from "../MapSearch"
 import {standartMap, bigMap} from "./mapStyle"
 
+
 const MapPage = props => {
 	const context = useContext(Context)
 	const cafes = context.state.cafes.read()
@@ -73,7 +74,7 @@ const MapPage = props => {
 		}
 	}
 
-	const createMap = state => {
+	const createMap = (state) => {
 		const mapContainer = window.document.getElementById('map')
 		setModalHeight(mapContainer.offsetHeight)
 
